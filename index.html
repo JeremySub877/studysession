@@ -1,0 +1,1781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Study Desk — GMAT &amp; CFA Level I</title>
+<style>
+  :root{
+    color-scheme: light;
+    --bg:#eaeef3;
+    --paper:#ffffff;
+    --paper-2:#eef2f7;
+    --ink:#10233b;
+    --ink-soft:#52617a;
+    --ink-faint:#8c99a9;
+    --line:#dae1ea;
+    --line-soft:#e8edf3;
+    --gold:#b3893a; --gold-soft:#f2e9d4;
+    --nav-bg:#0e2138; --nav-bg2:#0a1a2c; --nav-ink:#c4d2e2; --nav-ink-soft:#7f93ab;
+    --quant:#1f4e79; --quant-bg:#e7eef6; --quant-line:#c3d5ea;
+    --verbal:#2f6f54; --verbal-bg:#e5f1ec; --verbal-line:#c2dfd1;
+    --di:#9a6a1e; --di-bg:#f5ecda; --di-line:#e8d4ad;
+    --strategy:#56477f; --strategy-bg:#ebe6f3; --strategy-line:#d4c9e6;
+    --formula:#9a6a1e;
+    --good:#2f7a55; --good-bg:#e7f2eb;
+    --bad:#b0463b; --bad-bg:#f7eae8;
+    --warn:#9a6a1e; --warn-bg:#f6edda;
+    --radius:14px;
+    --shadow:0 1px 2px rgba(16,35,59,.06), 0 6px 22px rgba(16,35,59,.07);
+    --serif:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,'Times New Roman',serif;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    --mono:'SF Mono',ui-monospace,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased;}
+  .app{display:flex;min-height:100vh;}
+
+  /* ---------- Sidebar (dark, finance desk) ---------- */
+  .sidebar{width:244px;flex:0 0 244px;background:linear-gradient(180deg,var(--nav-bg),var(--nav-bg2));border-right:1px solid #0a1726;padding:22px 15px;position:sticky;top:0;height:100vh;overflow-y:auto;}
+  .brand{display:flex;gap:11px;align-items:center;padding:0 6px;}
+  .brand .crest{width:36px;height:36px;border-radius:9px;background:linear-gradient(140deg,var(--gold),#8a6a25);display:flex;align-items:center;justify-content:center;color:#1a1305;font-family:var(--serif);font-weight:700;font-size:19px;flex:0 0 36px;box-shadow:0 2px 8px rgba(0,0,0,.3);}
+  .brand .t{font-family:var(--serif);font-size:18px;font-weight:600;line-height:1.15;color:#fff;}
+  .brand .t small{display:block;font-family:var(--sans);font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-top:4px;}
+  .progswitch{display:flex;gap:5px;margin:20px 4px 6px;background:rgba(255,255,255,.06);padding:4px;border-radius:11px;}
+  .progswitch button{flex:1;border:none;background:none;color:var(--nav-ink-soft);font-family:var(--sans);font-size:13px;font-weight:700;letter-spacing:.03em;padding:8px 6px;border-radius:8px;cursor:pointer;transition:all .15s;}
+  .progswitch button:hover{color:#fff;}
+  .progswitch button.active{background:linear-gradient(140deg,var(--gold),#9c7829);color:#1a1305;box-shadow:0 1px 4px rgba(0,0,0,.25);}
+  .nav{margin-top:14px;display:flex;flex-direction:column;gap:3px;}
+  .nav .grouplbl{font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--nav-ink-soft);font-weight:700;padding:12px 12px 6px;}
+  .nav button{display:flex;align-items:center;gap:11px;width:100%;text-align:left;background:none;border:none;border-left:3px solid transparent;border-radius:0 9px 9px 0;padding:10px 12px;cursor:pointer;font-family:var(--sans);font-size:14px;color:var(--nav-ink);font-weight:500;transition:all .13s;}
+  .nav button:hover{background:rgba(255,255,255,.05);color:#fff;}
+  .nav button.active{background:rgba(179,137,58,.16);color:#fff;font-weight:650;border-left-color:var(--gold);}
+  .nav button .ic{width:18px;height:18px;flex:0 0 18px;opacity:.8;}
+  .nav button.active .ic{opacity:1;}
+  .nav .mini{margin-left:auto;font-size:11px;color:var(--nav-ink-soft);font-weight:700;font-variant-numeric:tabular-nums;}
+  #nav-cfa{display:none;}
+  body[data-prog="cfa"] #nav-gmat{display:none;}
+  body[data-prog="cfa"] #nav-cfa{display:flex;}
+  .reset{margin-top:22px;font-size:11px;color:var(--nav-ink-soft);background:none;border:1px solid rgba(255,255,255,.14);border-radius:9px;padding:8px 10px;cursor:pointer;width:100%;}
+  .reset:hover{background:rgba(255,255,255,.06);color:var(--nav-ink);}
+
+  /* ---------- Main ---------- */
+  .main{flex:1;min-width:0;padding:0 0 90px;max-width:none;}
+  .topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 46px;background:rgba(255,255,255,.82);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);}
+  .tb-title{font-family:var(--serif);font-size:15px;font-weight:600;color:var(--ink);}
+  .tb-title b{color:var(--gold);}
+  .tb-meta{display:flex;gap:18px;font-size:12px;color:var(--ink-soft);font-weight:600;font-variant-numeric:tabular-nums;}
+  .tb-meta span b{color:var(--ink);}
+  .wrap{padding:34px 46px 0;max-width:960px;}
+  .view{display:none;}
+  .view.active{display:block;animation:fade .28s ease;}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;padding:5px 12px;border-radius:30px;margin-bottom:14px;}
+  h1.page{font-family:var(--serif);font-size:33px;font-weight:600;margin:0 0 6px;letter-spacing:-.01em;}
+  .sub{color:var(--ink-soft);margin:0 0 26px;font-size:15.5px;max-width:700px;}
+  .toc{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 28px;}
+  .toc a{font-size:13px;text-decoration:none;color:var(--ink-soft);background:var(--paper);border:1px solid var(--line);border-radius:30px;padding:7px 14px;font-weight:600;transition:all .13s;}
+  .toc a:hover{color:var(--ink);border-color:var(--gold);}
+
+  .chapter{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:26px 30px;margin-bottom:22px;box-shadow:var(--shadow);scroll-margin-top:80px;}
+  .ch-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:8px;flex-wrap:wrap;}
+  .ch-title{display:flex;align-items:center;gap:14px;}
+  .ch-num{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:16px;color:#fff;flex:0 0 34px;}
+  .chapter h2{font-family:var(--serif);font-size:23px;margin:0;font-weight:600;}
+  .chapter h3{font-size:16.5px;margin:24px 0 8px;font-weight:700;color:var(--ink);}
+  .chapter p{margin:0 0 13px;}
+  .chapter ul,.chapter ol{margin:0 0 13px;padding-left:22px;}
+  .chapter li{margin-bottom:7px;}
+  .chapter strong{color:var(--ink);}
+  .keyidea{background:var(--paper-2);border-radius:12px;padding:14px 18px;margin:14px 0;font-size:14.5px;border-left:4px solid var(--gold);}
+  .keyidea strong{display:block;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:4px;}
+
+  .formula{background:#fbf6ec;border:1px solid var(--di-line);border-left:4px solid var(--formula);border-radius:10px;padding:14px 20px 16px;margin:14px 0;font-family:'Cambria Math','STIX Two Math','Times New Roman',Georgia,serif;font-size:17.5px;line-height:2.25;white-space:pre-wrap;}
+  .formula .flabel{display:block;width:-moz-fit-content;width:fit-content;background:var(--formula);color:#fff;font-family:var(--sans);font-size:10px;letter-spacing:.07em;text-transform:uppercase;font-weight:700;padding:3px 11px;border-radius:20px;margin-bottom:11px;}
+  .eqbox{background:#fbf6ec;border:1px solid var(--di-line);border-left:4px solid var(--formula);border-radius:10px;padding:14px 20px 16px;margin:14px 0;}
+  .eqbox .flabel{display:block;width:-moz-fit-content;width:fit-content;background:var(--formula);color:#fff;font-family:var(--sans);font-size:10px;letter-spacing:.07em;text-transform:uppercase;font-weight:700;padding:3px 11px;border-radius:20px;margin-bottom:12px;}
+  .eq{display:block;font-family:'Cambria Math','STIX Two Math','Times New Roman',Georgia,serif;font-size:18px;line-height:2.35;color:var(--ink);}
+  .eq + .eq{margin-top:2px;}
+  .eq i,.formula i{font-style:italic;}
+  .eq sup{font-size:.7em;vertical-align:super;line-height:0;}
+  .eq sub{font-size:.7em;vertical-align:sub;line-height:0;}
+  .frac{display:inline-flex;flex-direction:column;vertical-align:-0.55em;text-align:center;margin:0 .2em;}
+  .frac>span{padding:0 .45em;}
+  .frac>span:first-child{border-bottom:1.6px solid currentColor;padding-bottom:1px;}
+  .frac>span:last-child{padding-top:2px;}
+  .eqnote{font-family:var(--sans);font-style:italic;font-size:13px;color:var(--ink-soft);}
+  .sqrt{border-top:1.6px solid currentColor;padding:0 .15em 0 .1em;margin-left:.1em;}
+
+  details.worked{border:1px solid var(--line);border-radius:11px;margin:14px 0;background:var(--paper);overflow:hidden;}
+  details.worked summary{cursor:pointer;padding:13px 18px;font-weight:600;font-size:14.5px;display:flex;align-items:center;gap:10px;list-style:none;background:var(--paper-2);transition:background .12s;}
+  details.worked summary::-webkit-details-marker{display:none;}
+  details.worked summary:hover{background:var(--line-soft);}
+  details.worked summary .wx-tag{font-size:10px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;color:#fff;background:var(--quant);padding:3px 8px;border-radius:20px;}
+  details.worked[open] summary{border-bottom:1px solid var(--line);}
+  details.worked .wx-body{padding:16px 20px;}
+  ol.steps{counter-reset:step;list-style:none;padding-left:0;margin:0;}
+  ol.steps li{position:relative;padding:4px 0 12px 40px;margin:0;border-left:2px solid var(--line-soft);margin-left:13px;}
+  ol.steps li:last-child{border-left:2px solid transparent;}
+  ol.steps li::before{counter-increment:step;content:counter(step);position:absolute;left:-13px;top:2px;width:26px;height:26px;background:var(--paper);border:2px solid var(--line);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--ink-soft);}
+  ol.steps li .ans{display:inline-block;background:var(--good-bg);color:var(--good);border-radius:6px;padding:1px 8px;font-weight:700;}
+  .mistake{background:var(--warn-bg);border-radius:12px;padding:14px 18px;margin:16px 0 4px;border-left:4px solid var(--warn);font-size:14px;}
+  .mistake strong{display:block;color:var(--warn);margin-bottom:6px;font-size:13px;letter-spacing:.03em;}
+  .mistake ul{margin:0;padding-left:20px;} .mistake li{margin-bottom:5px;}
+  figure.diagram{margin:18px 0;text-align:center;background:var(--paper-2);border:1px solid var(--line);border-radius:12px;padding:18px;}
+  figure.diagram svg{max-width:100%;height:auto;}
+  figure.diagram figcaption{font-size:12.5px;color:var(--ink-soft);margin-top:10px;font-style:italic;}
+  table.tbl{border-collapse:collapse;width:100%;margin:12px 0;font-size:14px;}
+  table.tbl th,table.tbl td{border:1px solid var(--line);padding:8px 11px;text-align:left;}
+  table.tbl th{background:var(--ink);color:#fff;font-weight:600;}
+  table.tbl tr:nth-child(even) td{background:var(--paper-2);}
+
+  .review-btn{background:none;border:1px solid var(--line);border-radius:9px;padding:8px 14px;font-size:12.5px;cursor:pointer;color:var(--ink-soft);font-weight:650;white-space:nowrap;transition:all .13s;}
+  .review-btn:hover{border-color:var(--gold);color:var(--ink);}
+  .review-btn.done{background:var(--good-bg);border-color:var(--good);color:var(--good);}
+
+  .practice-head{display:flex;align-items:center;gap:12px;margin:34px 0 6px;}
+  .practice-head .line{flex:1;height:1px;background:var(--line);}
+  .practice-head h2{font-family:var(--serif);font-size:24px;margin:0;font-weight:600;}
+  .practice-intro{color:var(--ink-soft);font-size:14.5px;margin:0 0 20px;}
+  .q-block{border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-bottom:16px;background:var(--paper);box-shadow:var(--shadow);}
+  .q-topic{font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:9px;}
+  .q-stem{font-weight:500;margin-bottom:15px;}
+  .q-stem .tbl{margin-top:10px;}
+  .choices{display:flex;flex-direction:column;gap:9px;}
+  .choice{display:flex;align-items:flex-start;gap:11px;border:1px solid var(--line);border-radius:10px;padding:11px 14px;cursor:pointer;transition:background .1s,border-color .1s;background:var(--paper);}
+  .choice:hover{background:var(--paper-2);}
+  .choice input{margin-top:4px;}
+  .choice .letter{font-weight:700;color:var(--ink-soft);}
+  .choice.correct{border-color:var(--good);background:var(--good-bg);}
+  .choice.incorrect{border-color:var(--bad);background:var(--bad-bg);}
+  .choice.disabled{cursor:default;}
+  .q-actions{margin-top:15px;display:flex;align-items:center;gap:13px;}
+  .btn{font-family:var(--sans);font-size:14px;font-weight:650;border:none;border-radius:10px;padding:10px 20px;cursor:pointer;color:#fff;transition:filter .12s;}
+  .btn:hover{filter:brightness(1.08);}
+  .btn:disabled{opacity:.45;cursor:default;filter:none;}
+  .verdict{font-weight:700;font-size:14px;}
+  .verdict.ok{color:var(--good);} .verdict.no{color:var(--bad);}
+  .explain{margin-top:15px;border-top:1px dashed var(--line);padding-top:13px;font-size:14.5px;display:none;}
+  .explain.show{display:block;}
+  .explain .why{margin-top:9px;color:var(--ink-soft);font-size:13.5px;}
+
+  .hero{display:flex;gap:24px;align-items:center;background:linear-gradient(135deg,#fff,#f4f7fb);border:1px solid var(--line);border-radius:var(--radius);padding:26px 30px;margin-bottom:22px;box-shadow:var(--shadow);flex-wrap:wrap;}
+  .ring-wrap{display:flex;gap:26px;}
+  .ring{text-align:center;}
+  .ring .lbl{font-size:12px;color:var(--ink-soft);margin-top:6px;font-weight:600;}
+  .hero .pitch{flex:1;min-width:220px;}
+  .hero .pitch h2{font-family:var(--serif);font-size:22px;margin:0 0 6px;font-weight:600;}
+  .hero .pitch p{margin:0;color:var(--ink-soft);font-size:14.5px;}
+  .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:22px;}
+  .stat{background:var(--paper);border:1px solid var(--line);border-radius:13px;padding:17px 19px;box-shadow:var(--shadow);}
+  .stat .num{font-family:var(--serif);font-size:30px;font-weight:600;line-height:1;}
+  .stat .lbl{font-size:12.5px;color:var(--ink-soft);margin-top:7px;}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:24px 28px;margin-bottom:20px;box-shadow:var(--shadow);}
+  .card h2{font-family:var(--serif);font-size:21px;margin:0 0 16px;font-weight:600;}
+  .prog-row{display:flex;align-items:center;gap:14px;margin-bottom:15px;}
+  .prog-row .name{width:150px;font-weight:650;font-size:14px;display:flex;align-items:center;gap:9px;}
+  .swatch{width:11px;height:11px;border-radius:4px;flex:0 0 11px;}
+  .bar{flex:1;height:11px;background:var(--paper-2);border-radius:7px;overflow:hidden;}
+  .bar > span{display:block;height:100%;border-radius:7px;transition:width .6s cubic-bezier(.2,.8,.2,1);}
+  .prog-row .pct{width:130px;text-align:right;font-size:12.5px;color:var(--ink-soft);font-variant-numeric:tabular-nums;}
+
+  .sheet-sec{margin-bottom:26px;}
+  .sheet-sec h2{font-family:var(--serif);font-size:21px;margin:0 0 4px;display:flex;align-items:center;gap:10px;}
+  .sheet-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(264px,1fr));gap:14px;margin-top:14px;}
+  .sheet-card{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);}
+  .sheet-card h4{margin:0 0 8px;font-size:14px;}
+  .sheet-card .formula{margin:0;}
+  .sheet-card .eqbox{margin:6px 0 0;padding:12px 16px 13px;}
+  .sheet-card .eq{font-size:16.5px;line-height:2.15;}
+  .sheet-card ul{margin:8px 0 0;padding-left:20px;font-size:13.5px;}
+
+  /* roadmap */
+  .rmap{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;margin:6px 0 8px;}
+  .rmap-card{background:var(--paper);border:1px solid var(--line);border-radius:13px;padding:16px 18px;box-shadow:var(--shadow);position:relative;border-top:3px solid var(--quant);}
+  .rmap-card h4{margin:0 0 4px;font-size:15px;display:flex;align-items:center;justify-content:space-between;gap:8px;}
+  .rmap-card .wpill{font-size:11px;font-weight:700;color:var(--gold);background:var(--gold-soft);padding:2px 9px;border-radius:20px;white-space:nowrap;}
+  .rmap-card p{margin:0;font-size:13px;color:var(--ink-soft);}
+  .rmap-card .status{display:inline-block;margin-top:10px;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:3px 10px;border-radius:20px;}
+  .status.live{background:var(--good-bg);color:var(--good);}
+  .status.soon{background:var(--paper-2);color:var(--ink-faint);}
+
+  .footnote{font-size:12px;color:var(--ink-faint);margin-top:32px;border-top:1px solid var(--line);padding-top:16px;}
+
+  @media(max-width:820px){
+    .app{flex-direction:column;}
+    .sidebar{width:100%;height:auto;position:relative;flex:none;}
+    .nav{flex-direction:row;flex-wrap:wrap;}
+    .nav .grouplbl{width:100%;}
+    .nav button{width:auto;border-left:none;border-radius:9px;}
+    .topbar{padding:12px 18px;}
+    .wrap{padding:24px 18px 0;}
+    .chapter{padding:20px 18px;}
+    .tb-meta{display:none;}
+  }
+  /* ---------- batik watermark (lower-left) ---------- */
+  .app{position:relative;z-index:1;}
+  .batik{position:fixed;left:244px;bottom:0;width:340px;height:340px;opacity:.13;pointer-events:none;z-index:0;}
+  .batik svg{width:100%;height:100%;}
+  @media(max-width:820px){ .batik{left:0;width:240px;height:240px;opacity:.08;} }
+  /* ---------- quiz filter toolbar ---------- */
+  .qfilter{display:flex;gap:18px;flex-wrap:wrap;align-items:center;margin:0 0 18px;padding:12px 16px;background:var(--paper);border:1px solid var(--line);border-radius:12px;}
+  .qfilter .grp{display:flex;gap:6px;align-items:center;flex-wrap:wrap;}
+  .qfilter .lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-faint);font-weight:700;margin-right:2px;}
+  .qfilter button{font-size:12px;border:1px solid var(--line);background:var(--paper);border-radius:20px;padding:5px 12px;cursor:pointer;color:var(--ink-soft);font-weight:600;transition:all .12s;}
+  .qfilter button:hover{border-color:var(--gold);}
+  .qfilter button.active{background:var(--ink);color:#fff;border-color:var(--ink);}
+  .dbadge{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:2px 8px;border-radius:20px;margin-left:8px;vertical-align:middle;}
+  .dbadge.easy{background:var(--good-bg);color:var(--good);}
+  .dbadge.med{background:var(--gold-soft);color:var(--gold);}
+  .dbadge.hard{background:var(--bad-bg);color:var(--bad);}
+  .flagbtn{margin-left:auto;background:none;border:1px solid var(--line);border-radius:8px;padding:6px 11px;cursor:pointer;font-size:13px;color:var(--ink-faint);font-weight:600;}
+  .flagbtn:hover{border-color:var(--gold);color:var(--gold);}
+  .flagbtn.on{color:var(--gold);border-color:var(--gold);background:var(--gold-soft);}
+  .btn.ghost{background:var(--paper-2);color:var(--ink);}
+  .qempty{color:var(--ink-soft);font-size:14px;padding:18px;text-align:center;border:1px dashed var(--line);border-radius:12px;}
+  /* ---------- focus / weak areas ---------- */
+  .focus-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line-soft);}
+  .focus-row:last-child{border-bottom:none;}
+  .focus-row .fa-name{flex:1;font-weight:600;font-size:14px;}
+  .focus-row .fa-acc{font-variant-numeric:tabular-nums;font-size:13px;color:var(--ink-soft);width:70px;text-align:right;}
+  .focus-row .fa-go{font-size:12px;border:1px solid var(--line);background:var(--paper);border-radius:8px;padding:5px 11px;cursor:pointer;color:var(--ink);font-weight:600;}
+  .focus-row .fa-go:hover{border-color:var(--gold);}
+  /* ---------- flashcards ---------- */
+  .flashmeta{display:flex;gap:18px;justify-content:center;color:var(--ink-soft);font-size:13px;margin-bottom:16px;font-weight:600;}
+  .flashmeta b{color:var(--ink);}
+  .flashcard{position:relative;min-height:210px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(135deg,#fff,#f4f7fb);box-shadow:var(--shadow);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:34px 30px;cursor:pointer;}
+  .flashcard .ftopic{position:absolute;top:14px;left:18px;font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-faint);font-weight:700;}
+  .flashcard .fcontent{font-family:var(--serif);font-size:22px;color:var(--ink);line-height:1.5;}
+  .flashcard .fhint{position:absolute;bottom:14px;font-size:11.5px;color:var(--ink-faint);}
+  .flashrate{display:flex;gap:12px;justify-content:center;margin-top:18px;}
+  .flashrate button{font-size:14px;font-weight:650;border:none;border-radius:11px;padding:11px 26px;cursor:pointer;color:#fff;}
+  .flashrate .again{background:var(--bad);}
+  .flashrate .good{background:var(--good);}
+  .flashdone{text-align:center;padding:40px 20px;}
+  .flashdone .big{font-family:var(--serif);font-size:24px;margin-bottom:8px;}
+  /* ---------- error journal ---------- */
+  .jitem{border:1px solid var(--line);border-left:4px solid var(--bad);border-radius:12px;padding:16px 18px;margin-bottom:14px;background:var(--paper);box-shadow:var(--shadow);}
+  .jitem .jq{font-weight:600;margin-bottom:8px;}
+  .jitem .jline{font-size:13.5px;margin-bottom:4px;}
+  .jitem .jwrong{color:var(--bad);} .jitem .jright{color:var(--good);}
+  .jitem .jexp{font-size:13px;color:var(--ink-soft);margin-top:8px;}
+  .jnote{width:100%;margin-top:10px;border:1px solid var(--line);border-radius:8px;padding:9px 11px;font-family:var(--sans);font-size:13px;resize:vertical;min-height:46px;background:var(--paper-2);}
+  /* ---------- sidebar extra buttons ---------- */
+  .sidebtns{display:flex;gap:6px;margin-top:10px;}
+  .sidebtn{flex:1;font-size:11px;color:var(--nav-ink-soft);background:none;border:1px solid rgba(255,255,255,.14);border-radius:9px;padding:7px 6px;cursor:pointer;}
+  .sidebtn:hover{background:rgba(255,255,255,.06);color:var(--nav-ink);}
+
+</style>
+</head>
+<body data-prog="gmat">
+<div class="batik" aria-hidden="true"><svg viewBox="0 0 340 340" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<pattern id="batikTile" width="68" height="68" patternUnits="userSpaceOnUse">
+<g fill="none" stroke="#b3893a" stroke-width="1.3">
+<circle cx="34" cy="34" r="7"/>
+<circle cx="47" cy="34" r="2.6"/><circle cx="43.2" cy="43.2" r="2.6"/><circle cx="34" cy="47" r="2.6"/><circle cx="24.8" cy="43.2" r="2.6"/><circle cx="21" cy="34" r="2.6"/><circle cx="24.8" cy="24.8" r="2.6"/><circle cx="34" cy="21" r="2.6"/><circle cx="43.2" cy="24.8" r="2.6"/>
+<path d="M-6 26 L26 -6" stroke-width="1"/><path d="M42 74 L74 42" stroke-width="1"/><path d="M0 68 Q34 50 68 68" stroke-width="0.9"/>
+</g>
+<g fill="#1f4e79"><circle cx="34" cy="34" r="2"/><circle cx="0" cy="0" r="1.7"/><circle cx="68" cy="0" r="1.7"/><circle cx="0" cy="68" r="1.7"/><circle cx="68" cy="68" r="1.7"/></g>
+</pattern>
+<radialGradient id="batikFade" cx="0%" cy="100%" r="125%">
+<stop offset="0%" stop-color="white" stop-opacity="1"/><stop offset="60%" stop-color="white" stop-opacity="0.55"/><stop offset="100%" stop-color="white" stop-opacity="0"/>
+</radialGradient>
+<mask id="batikMask"><rect width="340" height="340" fill="url(#batikFade)"/></mask>
+</defs>
+<rect width="340" height="340" fill="url(#batikTile)" mask="url(#batikMask)"/>
+</svg></div>
+
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand"><div class="crest">&Sigma;</div><div class="t">Study Desk<small>GMAT &amp; CFA L1</small></div></div>
+    <div class="progswitch">
+      <button data-prog="gmat" class="active">GMAT</button>
+      <button data-prog="cfa">CFA L1</button>
+    </div>
+    <nav class="nav" id="nav-gmat">
+      <div class="grouplbl">GMAT Focus</div>
+      <button data-view="dashboard" class="active"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>Dashboard</button>
+      <button data-view="quant"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 7h14M7 12h4M5 17h14M15 11l4 4M19 11l-4 4"/></svg>Quant<span class="mini" id="mini-quant"></span></button>
+      <button data-view="verbal"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h16v11H8l-4 3z"/><path d="M8 9h8M8 12h5"/></svg>Verbal<span class="mini" id="mini-verbal"></span></button>
+      <button data-view="di"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Data Insights<span class="mini" id="mini-di"></span></button>
+      <div class="grouplbl">Reference</div>
+      <button data-view="formulas"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>Formula sheet</button>
+      <button data-view="strategy"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg>Strategy &amp; test day</button>
+      <div class="grouplbl">Practice tools</div>
+      <button data-view="flashcards"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="14" height="14" rx="2"/><path d="M7 9h6M7 13h4"/><path d="M21 8v9a2 2 0 0 1-2 2H10"/></svg>Flashcards</button>
+      <button data-view="journal"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 4h12a2 2 0 0 1 2 2v14l-4-2-4 2-4-2-4 2V6a2 2 0 0 1 2-2z"/></svg>Error journal</button>
+    </nav>
+    <nav class="nav" id="nav-cfa">
+      <div class="grouplbl">CFA Level I</div>
+      <button data-view="cfa-dashboard" class="active"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>Dashboard</button>
+      <button data-view="cfa-roadmap"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3z"/><path d="M9 3v15M15 6v15"/></svg>Roadmap (10 topics)</button>
+      <div class="grouplbl">Book 1 — built</div>
+      <button data-view="cfa-qm"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 7h14M7 12h4M5 17h14M15 11l4 4M19 11l-4 4"/></svg>Quant Methods<span class="mini" id="mini-qm"></span></button>
+      <button data-view="cfa-econ"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Economics<span class="mini" id="mini-econ"></span></button>
+      <div class="grouplbl">Reference</div>
+      <button data-view="cfa-formulas"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>Formula sheet</button>
+      <div class="grouplbl">Practice tools</div>
+      <button data-view="flashcards"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="14" height="14" rx="2"/><path d="M7 9h6M7 13h4"/><path d="M21 8v9a2 2 0 0 1-2 2H10"/></svg>Flashcards</button>
+      <button data-view="journal"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 4h12a2 2 0 0 1 2 2v14l-4-2-4 2-4-2-4 2V6a2 2 0 0 1 2-2z"/></svg>Error journal</button>
+    </nav>
+    <div class="sidebtns"><button class="sidebtn" id="exportBtn">⇩ Export</button><button class="sidebtn" id="importBtn">⇧ Import</button></div>
+    <input type="file" id="importFile" accept="application/json" style="display:none">
+    <button class="reset" id="resetBtn">Reset all progress</button>
+  </aside>
+
+  <main class="main" id="main">
+    <div class="topbar"><div class="tb-title" id="tb-title"></div><div class="tb-meta" id="tb-meta"></div></div>
+    <div class="wrap">
+    <section data-prog="gmat" class="view" id="view-dashboard">
+      <span class="eyebrow" style="background:var(--paper-2);color:var(--ink-soft)">Your study home</span>
+      <h1 class="page">Dashboard</h1>
+      <p class="sub">A teach-from-scratch GMAT Focus playbook. Read each chapter, work the examples, then test yourself. Everything you do is saved on this device and waiting when you return.</p>
+      <div id="dash-body"></div>
+    </section>
+
+    <!-- ===================== QUANT ===================== -->
+    <section data-prog="gmat" class="view" id="view-quant">
+      <span class="eyebrow" style="background:var(--quant-bg);color:var(--quant)">Quantitative Reasoning</span>
+      <h1 class="page">Quant, from the ground up</h1>
+      <p class="sub">The Focus edition tests arithmetic, algebra, word problems, number properties, and statistics — and <strong>no geometry</strong>. No calculator is allowed, so we build number sense alongside the rules.</p>
+      <div class="toc">
+        <a href="#ch-q1">1 · Arithmetic foundations</a>
+        <a href="#ch-q2">2 · Percents, ratios &amp; proportions</a>
+        <a href="#ch-q3">3 · Number properties</a>
+        <a href="#ch-q4">4 · Algebra</a>
+        <a href="#ch-q5">5 · Word problems</a>
+        <a href="#ch-q6">6 · Statistics &amp; probability</a>
+      </div>
+
+      <!-- Q1 -->
+      <article class="chapter" id="ch-q1">
+        <div class="ch-head">
+          <div class="ch-title"><div class="ch-num" style="background:var(--quant)">1</div><h2>Arithmetic foundations</h2></div>
+          <button class="review-btn" data-review="ch-q1">Mark reviewed</button>
+        </div>
+        <p>Everything in Quant rests on confident arithmetic: the number line, order of operations, fractions, and decimals. Let us rebuild it cleanly.</p>
+
+        <h3>The number line &amp; integers</h3>
+        <p>Integers are the whole numbers and their negatives: …, −3, −2, −1, 0, 1, 2, 3, … They sit on a line, negatives to the left of zero, positives to the right. The <strong>absolute value</strong> |x| is the distance from zero, so |−4| = 4 and |4| = 4.</p>
+        <figure class="diagram">
+          <svg viewBox="0 0 520 70" width="520"><line x1="20" y1="40" x2="500" y2="40" stroke="#39598f" stroke-width="2"/>
+          <g font-family="monospace" font-size="13" fill="#2c2823" text-anchor="middle">
+          <g stroke="#39598f" stroke-width="2"><line x1="60" y1="34" x2="60" y2="46"/><line x1="120" y1="34" x2="120" y2="46"/><line x1="180" y1="34" x2="180" y2="46"/><line x1="240" y1="34" x2="240" y2="46"/><line x1="300" y1="34" x2="300" y2="46"/><line x1="360" y1="34" x2="360" y2="46"/><line x1="420" y1="34" x2="420" y2="46"/></g>
+          <text x="60" y="62">-3</text><text x="120" y="62">-2</text><text x="180" y="62">-1</text><text x="240" y="62">0</text><text x="300" y="62">1</text><text x="360" y="62">2</text><text x="420" y="62">3</text></g>
+          <polygon points="500,40 490,35 490,45" fill="#39598f"/><polygon points="20,40 30,35 30,45" fill="#39598f"/>
+          </svg>
+          <figcaption>Smaller numbers are always to the left. So −3 &lt; −1, and adding moves you right, subtracting moves you left.</figcaption>
+        </figure>
+        <div class="keyidea"><strong>Sign rules</strong> Same signs multiply/divide to a positive; different signs give a negative. (−)(−)=+, (−)(+)=−. Subtracting a negative adds: 5 − (−3) = 8.</div>
+
+        <h3>Order of operations (PEMDAS)</h3>
+        <div class="formula"><span class="flabel">Rule</span>Parentheses → Exponents → Multiply/Divide (left→right) → Add/Subtract (left→right)</div>
+        <details class="worked"><summary><span class="wx-tag">Worked example</span> Evaluate 12 − 3 × 2² + (8 ÷ 4)</summary>
+          <div class="wx-body"><ol class="steps">
+            <li>Parentheses first: (8 ÷ 4) = 2. Now 12 − 3 × 2² + 2.</li>
+            <li>Exponents: 2² = 4. Now 12 − 3 × 4 + 2.</li>
+            <li>Multiplication: 3 × 4 = 12. Now 12 − 12 + 2.</li>
+            <li>Left to right addition/subtraction: 12 − 12 = 0, then 0 + 2 = <span class="ans">2</span>.</li>
+          </ol></div>
+        </details>
+
+        <h3>Fractions</h3>
+        <p>A fraction is part / whole. To <strong>add or subtract</strong>, you need a common denominator. To <strong>multiply</strong>, multiply across. To <strong>divide</strong>, multiply by the reciprocal (flip the second fraction).</p>
+        <div class="formula"><span class="flabel">Formula</span>a/b + c/d = (ad + bc) / bd      a/b × c/d = ac/bd      a/b ÷ c/d = a/b × d/c</div>
+        <details class="worked"><summary><span class="wx-tag">Worked example</span> Compute 3/4 + 2/3</summary>
+          <div class="wx-body"><ol class="steps">
+            <li>Common denominator of 4 and 3 is 12.</li>
+            <li>Rewrite: 3/4 = 9/12 and 2/3 = 8/12.</li>
+            <li>Add the numerators: 9/12 + 8/12 = 17/12.</li>
+            <li>17/12 is improper; as a mixed number it is <span class="ans">1 5/12</span>.</li>
+          </ol></div>
+        </details>
+        <details class="worked"><summary><span class="wx-tag">Worked example</span> Compute 3/5 ÷ 9/10</summary>
+          <div class="wx-body"><ol class="steps">
+            <li>Dividing means multiply by the reciprocal: 3/5 × 10/9.</li>
+            <li>Multiply across: (3 × 10) / (5 × 9) = 30/45.</li>
+            <li>Simplify by dividing top and bottom by 15: <span class="ans">2/3</span>.</li>
+          </ol></div>
+        </details>
+
+        <h3>Decimals &amp; conversions</h3>
+        <p>Memorizing common fraction–decimal–percent equivalents saves real time (no calculator!): 1/2 = 0.5 = 50%, 1/4 = 0.25 = 25%, 1/5 = 0.2 = 20%, 1/8 = 0.125 = 12.5%, 1/3 ≈ 0.333 = 33⅓%.</p>
+
+        <div class="mistake"><strong>⚠ Common mistakes</strong><ul>
+          <li>Doing addition before multiplication — multiplication always comes first.</li>
+          <li>Adding fractions by adding both tops and bottoms (3/4 + 2/3 ≠ 5/7). You must find a common denominator.</li>
+          <li>Forgetting that subtracting a negative is the same as adding.</li>
+        </ul></div>
+      </article>
+
+      <!-- Q2 -->
+      <article class="chapter" id="ch-q2">
+        <div class="ch-head">
+          <div class="ch-title"><div class="ch-num" style="background:var(--quant)">2</div><h2>Percents, ratios &amp; proportions</h2></div>
+          <button class="review-btn" data-review="ch-q2">Mark reviewed</button>
+        </div>
+        <p>Percent simply means "per 100." So 25% = 25/100 = 0.25. The single most important question to keep asking is: <em>percent of what?</em> The base can change inside a problem.</p>
+        <div class="formula"><span class="flabel">Formulas</span>x% of N = (x/100) × N
+Percent change = (new − old) / old × 100%
+Successive percents MULTIPLY:  +25% then −20%  →  × 1.25 × 0.80</div>
+        <figure class="diagram">
+          <svg viewBox="0 0 460 150" width="460"><g font-family="var(--sans)" font-size="12" fill="#2c2823" text-anchor="middle">
+          <rect x="60" y="60" width="70" height="70" fill="#c7d6ea" stroke="#39598f"/><text x="95" y="148">$80</text><text x="95" y="50">start</text>
+          <rect x="200" y="30" width="70" height="100" fill="#9bb6dd" stroke="#39598f"/><text x="235" y="148">$100</text><text x="235" y="20">+25%</text>
+          <rect x="340" y="60" width="70" height="70" fill="#c7d6ea" stroke="#39598f"/><text x="375" y="148">$80</text><text x="375" y="50">−20%</text>
+          <path d="M135 95 L195 80" stroke="#b1742a" stroke-width="2" marker-end="url(#ar)"/><path d="M275 80 L335 95" stroke="#b1742a" stroke-width="2" marker-end="url(#ar)"/>
+          </g><defs><marker id="ar" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="#b1742a"/></marker></defs></svg>
+          <figcaption>A 25% rise then a 20% cut does not cancel cleanly — the 20% comes off the bigger $100. Here it returns to $80, but only because of the specific numbers.</figcaption>
+        </figure>
+        <details class="worked"><summary><span class="wx-tag">Worked example</span> A $80 coat is marked up 25%, then discounted 20%. Final price?</summary>
+          <div class="wx-body"><ol class="steps">
+            <li>Markup: 80 × 1.25 = 100.</li>
+            <li>Discount off the new price: 100 × 0.80 = 80.</li>
+            <li>Final price is <span class="ans">$80</span>. The percentages do not simply cancel — it is a coincidence of these numbers.</li>
+          </ol></div>
+        </details>
+
+        <h3>Ratios &amp; proportions</h3>
+        <p>A ratio compares quantities: 3 : 5 means "3 parts to 5 parts." A proportion sets two ratios equal; solve by cross-multiplying. To combine A : B with B : C, scale them so the shared term B matches.</p>
+        <div class="formula"><span class="flabel">Rule</span>If a/b = c/d, then a·d = b·c  (cross-multiply)</div>
+        <details class="worked"><summary><span class="wx-tag">Worked example</span> If A : B = 3 : 5 and B : C = 2 : 7, find A : B : C</summary>
+          <div class="wx-body"><ol class="steps">
+            <li>The shared term B is 5 in the first ratio and 2 in the second. Their LCM is 10.</li>
+            <li>Scale A : B = 3 : 5 up by 2 → 6 : 10.</li>
+            <li>Scale B : C = 2 : 7 up by 5 → 10 : 35.</li>
+            <li>Now B matches at 10, so A : B : C = <span class="ans">6 : 10 : 35</span>.</li>
+          </ol></div>
+        </details>
+        <div class="mistake"><strong>⚠ Common mistakes</strong><ul>
+          <li>Reading 0.2% as 0.2 or 2%. 0.2% = 0.002.</li>
+          <li>Reversing a percent wrongly: if x is 30% of y, then y is 333⅓% of x (divide by 0.3), not 70% or 300%.</li>
+          <li>Stacking ratios side by side without matching the shared term first.</li>
+        </ul></div>
+      </article>
+
+      <!-- Q3 -->
+      <article class="chapter" id="ch-q3">
+        <div class="ch-head">
+          <div class="ch-title"><div class="ch-num" style="background:var(--quant)">3</div><h2>Number properties</h2></div>
+          <button class="review-btn" data-review="ch-q3">Mark reviewed</button>
+        </div>
+        <p>These questions test how integers <em>behave</em>: factors, primes, even/odd, divisibility, and remainders. Little computation, lots of logic.</p>
+        <h3>Factors, multiples &amp; primes</h3>
+        <p>A <strong>factor</strong> divides a number evenly; a <strong>multiple</strong> is the number times an integer. A <strong>prime</strong> has exactly two factors, 1 and itself (2, 3, 5, 7, 11, …). 2 is the only even prime. Every integer breaks into a unique product of primes — its <strong>prime factorization</strong>.</p>
+        <details class="worked"><summary><span class="wx-tag">Worked example</span> Prime-factorize 84</summary>
+          <div class="wx-body"><ol class="steps">
+            <li>84 is even: 84 = 2 × 42.</li>
+            <li>42 = 2 × 21.</li>
+            <li>21 = 3 × 7, both prime.</li>
+            <li>So 84 = <span class="ans">2² × 3 × 7</span>.</li>
+          </ol></div>
+        </details>
+        <h3>Divisibility shortcuts</h3>
+        <table class="tbl"><thead><tr><th>Divisible by</th><th>Test</th></tr></thead><tbody>
+          <tr><td>2</td><td>last digit is even</td></tr>
+          <tr><td>3</td><td>digit sum is divisible by 3</td></tr>
+          <tr><td>4</td><td>last two digits divisible by 4</td></tr>
+          <tr><td>5</td><td>ends in 0 or 5</td></tr>
+          <tr><td>9</td><td>digit sum divisible by 9</td></tr>
+        </tbody></table>
+        <h3>Even / odd (parity)</h3>
+        <div class="formula"><span class="flabel">Rules</span>even ± even = even      odd ± odd = even      even ± odd = odd
+even × anything = even      odd × odd = odd</div>
+        <div class="keyidea"><strong>Powerful fact</strong> The product of two consecutive integers n(n+1) is always even, because one of any two consecutive integers is even.</div>
+        <h3>Remainders</h3>
+        <details class="worked"><summary><span class="wx-tag">Worked example</span> What is the remainder when 7⁴ is divided by 5?</summary>
+          <div class="wx-body"><ol class="steps">
+            <li>Replace 7 with its remainder mod 5: 7 leaves remainder 2.</li>
+            <li>So 7⁴ has the same remainder as 2⁴ = 16.</li>
+            <li>16 ÷ 5 = 3 remainder 1. Answer: <span class="ans">1</span>. (Check: 7⁴ = 2401 = 5×480 + 1.)</li>
+          </ol></div>
+        </details>
+        <div class="mistake"><strong>⚠ Common mistakes</strong><ul>
+          <li>Forgetting 1 is not prime and 2 is the only even prime.</li>
+          <li>Assuming n² is always odd or always even — it depends on n. Test small cases (0, 1, 2, −1).</li>
+          <li>Computing huge powers directly instead of reducing the base by its remainder first.</li>
+        </ul></div>
+      </article>
+
+      <!-- Q4 -->
+      <article class="chapter" id="ch-q4">
+        <div class="ch-head">
+          <div class="ch-title"><div class="ch-num" style="background:var(--quant)">4</div><h2>Algebra</h2></div>
+          <button class="review-btn" data-review="ch-q4">Mark reviewed</button>
+        </div>
+        <p>Algebra is arithmetic with unknowns. Translate the words into one variable when you can; only add a second variable if you also have a second equation.</p>
+        <h3>Solving linear equations</h3>
+        <p>Do the same thing to both sides until the variable is alone. Distribute carefully across parentheses.</p>
+        <details class="worked"><summary><span class="wx-tag">Worked example</span> Solve 3(x − 2) = 2x + 5</summary>
+          <div class="wx-body"><ol class="steps">
+            <li>Distribute the 3 to <em>both</em> terms: 3x − 6 = 2x + 5.</li>
+            <li>Subtract 2x from both sides: x − 6 = 5.</li>
+            <li>Add 6: x = <span class="ans">11</span>.</li>
+          </ol></div>
+        </details>
+        <h3>Systems of equations</h3>
+        <p>Two equations, two unknowns. <strong>Elimination:</strong> add or subtract to cancel a variable. <strong>Substitution:</strong> solve one for a variable and plug in.</p>
+        <details class="worked"><summary><span class="wx-tag">Worked example</span> Solve x + y = 10 and x − y = 4</summary>
+          <div class="wx-body"><ol class="steps">
+            <li>Add the two equations; the y's cancel: 2x = 14.</li>
+            <li>So x = 7.</li>
+            <li>Substitute back: 7 + y = 10 → y = 3. Solution: <span class="ans">x = 7, y = 3</span>.</li>
+          </ol></div>
+        </details>
+        <h3>Exponents</h3>
+        <div class="formula"><span class="flabel">Rules</span>xᵃ · xᵇ = xᵃ⁺ᵇ      xᵃ / xᵇ = xᵃ⁻ᵇ      (xᵃ)ᵇ = xᵃᵇ      x⁰ = 1      x⁻ⁿ = 1/xⁿ</div>
+        <details class="worked"><summary><span class="wx-tag">Worked example</span> If 2ˣ = 32, find x</summary>
+          <div class="wx-body"><ol class="steps">
+            <li>Write 32 as a power of 2: 32 = 2 × 2 × 2 × 2 × 2 = 2⁵.</li>
+            <li>So 2ˣ = 2⁵, meaning the exponents match.</li>
+            <li>x = <span class="ans">5</span>.</li>
+          </ol></div>
+        </details>
+        <h3>Quadratics &amp; factoring</h3>
+        <div class="formula"><span class="flabel">Patterns</span>x² + (p+q)x + pq = (x + p)(x + q)
+a² − b² = (a + b)(a − b)
+Quadratic formula:  x = [ −b ± √(b² − 4ac) ] / 2a</div>
+        <details class="worked"><summary><span class="wx-tag">Worked example</span> Solve x² − 5x + 6 = 0</summary>
+          <div class="wx-body"><ol class="steps">
+            <li>Find two numbers that multiply to +6 and add to −5: those are −2 and −3.</li>
+            <li>Factor: (x − 2)(x − 3) = 0.</li>
+            <li>Set each factor to zero: x = 2 or x = 3. The <strong>roots</strong> are <span class="ans">2 and 3</span> (the values that make a factor zero — note the sign flips from the factors).</li>
+          </ol></div>
+        </details>
+        <h3>Inequalities</h3>
+        <div class="keyidea"><strong>The one rule everyone forgets</strong> Multiplying or dividing both sides by a <em>negative</em> number flips the inequality sign.</div>
+        <details class="worked"><summary><span class="wx-tag">Worked example</span> Solve −3x + 2 &gt; 11</summary>
+          <div class="wx-body"><ol class="steps">
+            <li>Subtract 2 from both sides: −3x &gt; 9.</li>
+            <li>Divide by −3 — and flip the sign: x &lt; −3.</li>
+            <li>Answer: <span class="ans">x &lt; −3</span>.</li>
+          </ol></div>
+        </details>
+        <div class="mistake"><strong>⚠ Common mistakes</strong><ul>
+          <li>Not distributing to every term inside parentheses.</li>
+          <li>Confusing the factors (x−2)(x−3) with the roots (2 and 3) — the roots have the opposite sign of the numbers inside.</li>
+          <li>Forgetting to flip the inequality when dividing by a negative.</li>
+        </ul></div>
+      </article>
+
+      <!-- Q5 -->
+      <article class="chapter" id="ch-q5">
+        <div class="ch-head">
+          <div class="ch-title"><div class="ch-num" style="background:var(--quant)">5</div><h2>Word problems</h2></div>
+          <button class="review-btn" data-review="ch-q5">Mark reviewed</button>
+        </div>
+        <p>The skill is translation. Build a small table of what you know, name the unknown, and write an equation.</p>
+        <table class="tbl"><thead><tr><th>Words</th><th>Math</th></tr></thead><tbody>
+          <tr><td>is, was, equals</td><td>=</td></tr>
+          <tr><td>of</td><td>× (multiply)</td></tr>
+          <tr><td>more than / increased by</td><td>+</td></tr>
+          <tr><td>less than / fewer</td><td>−</td></tr>
+          <tr><td>per</td><td>÷ (a rate)</td></tr>
+        </tbody></table>
+        <h3>Rate · time = distance, and work</h3>
+        <div class="formula"><span class="flabel">Formulas</span>Distance = rate × time
+Combined work rate = 1/a + 1/b   (rates ADD; times do not)</div>
+        <details class="worked"><summary><span class="wx-tag">Worked example</span> A train goes 180 miles in 3 hours. How far in 5 hours at that rate?</summary>
+          <div class="wx-body"><ol class="steps">
+            <li>Rate = distance ÷ time = 180 ÷ 3 = 60 mph.</li>
+            <li>Distance in 5 hours = rate × time = 60 × 5.</li>
+            <li>= <span class="ans">300 miles</span>.</li>
+          </ol></div>
+        </details>
+        <details class="worked"><summary><span class="wx-tag">Worked example</span> Pump A fills a tank in 4 h, pump B in 6 h. Together?</summary>
+          <div class="wx-body"><ol class="steps">
+            <li>Rates add: 1/4 + 1/6 of the tank per hour.</li>
+            <li>Common denominator 12: 3/12 + 2/12 = 5/12 per hour.</li>
+            <li>Time = 1 ÷ (5/12) = 12/5 = <span class="ans">2.4 hours</span> — faster than either alone, as it must be.</li>
+          </ol></div>
+        </details>
+        <h3>Mixtures &amp; averages</h3>
+        <div class="formula"><span class="flabel">Formula</span>Average = sum ÷ count    →    sum = average × count</div>
+        <details class="worked"><summary><span class="wx-tag">Worked example</span> How much pure water to add to 10 L of 40% acid to make it 25% acid?</summary>
+          <div class="wx-body"><ol class="steps">
+            <li>Track the acid — it does not change: 40% of 10 = 4 L of acid.</li>
+            <li>We want that 4 L to be 25% of the new total T: 4 = 0.25 × T → T = 16 L.</li>
+            <li>Water added = 16 − 10 = <span class="ans">6 liters</span>.</li>
+          </ol></div>
+        </details>
+        <h3>Overlapping sets</h3>
+        <div class="formula"><span class="flabel">Formula</span>Total = A + B − (both) + (neither)</div>
+        <figure class="diagram">
+          <svg viewBox="0 0 360 150" width="360"><circle cx="140" cy="75" r="60" fill="#c7d6ea" fill-opacity=".6" stroke="#39598f"/><circle cx="220" cy="75" r="60" fill="#cbe0c5" fill-opacity=".6" stroke="#4d7a47"/>
+          <g font-family="var(--sans)" font-size="13" fill="#2c2823" text-anchor="middle"><text x="110" y="80">A only</text><text x="250" y="80">B only</text><text x="180" y="80">both</text></g></svg>
+          <figcaption>The overlap is counted in both A and B, so you subtract it once to avoid double-counting.</figcaption>
+        </figure>
+        <div class="mistake"><strong>⚠ Common mistakes</strong><ul>
+          <li>Averaging rates or times instead of adding rates in work problems.</li>
+          <li>Tracking percentages in mixtures rather than the actual quantity of the substance.</li>
+          <li>Forgetting to subtract the overlap in set problems (double-counting).</li>
+        </ul></div>
+      </article>
+
+      <!-- Q6 -->
+      <article class="chapter" id="ch-q6">
+        <div class="ch-head">
+          <div class="ch-title"><div class="ch-num" style="background:var(--quant)">6</div><h2>Statistics &amp; probability</h2></div>
+          <button class="review-btn" data-review="ch-q6">Mark reviewed</button>
+        </div>
+        <h3>Center &amp; spread</h3>
+        <div class="formula"><span class="flabel">Definitions</span>Mean = sum ÷ count
+Median = middle value when sorted (average the two middle if even count)
+Mode = most frequent value
+Range = max − min</div>
+        <p><strong>Standard deviation</strong> measures how spread out values are around the mean. Identical values have SD = 0; more spread means a larger SD. You will compare, not compute, it.</p>
+        <figure class="diagram">
+          <svg viewBox="0 0 460 130" width="460"><g font-family="var(--sans)" font-size="12" fill="#2c2823">
+          <text x="10" y="35">Set A</text><circle cx="220" cy="30" r="6" fill="#39598f"/><circle cx="232" cy="30" r="6" fill="#39598f"/><circle cx="244" cy="30" r="6" fill="#39598f"/><circle cx="208" cy="30" r="6" fill="#39598f"/>
+          <text x="320" y="35" fill="#6a645a">tight → small SD</text>
+          <text x="10" y="95">Set B</text><circle cx="90" cy="90" r="6" fill="#4d7a47"/><circle cx="180" cy="90" r="6" fill="#4d7a47"/><circle cx="280" cy="90" r="6" fill="#4d7a47"/><circle cx="400" cy="90" r="6" fill="#4d7a47"/>
+          <text x="120" y="115" fill="#6a645a">spread → large SD</text>
+          <line x1="80" y1="55" x2="440" y2="55" stroke="#e4dccb"/></g></svg>
+          <figcaption>Same number of dots, very different spread. Standard deviation captures that spread, regardless of how big the numbers are.</figcaption>
+        </figure>
+        <details class="worked"><summary><span class="wx-tag">Worked example</span> Find the median of {3, 7, 2, 9, 5}</summary>
+          <div class="wx-body"><ol class="steps">
+            <li>Sort first: 2, 3, 5, 7, 9.</li>
+            <li>Five values → the middle (3rd) one is the median.</li>
+            <li>Median = <span class="ans">5</span>. (The mean is 26/5 = 5.2 — don't confuse them.)</li>
+          </ol></div>
+        </details>
+        <h3>Probability</h3>
+        <div class="formula"><span class="flabel">Rules</span>P(event) = favorable ÷ total
+P(A and B), independent = P(A) × P(B)
+P(A or B), mutually exclusive = P(A) + P(B)
+P(not A) = 1 − P(A)</div>
+        <details class="worked"><summary><span class="wx-tag">Worked example</span> A fair coin is flipped twice. P(two heads)?</summary>
+          <div class="wx-body"><ol class="steps">
+            <li>Each flip is independent, P(head) = 1/2.</li>
+            <li>P(head AND head) = 1/2 × 1/2.</li>
+            <li>= <span class="ans">1/4</span>.</li>
+          </ol></div>
+        </details>
+        <div class="mistake"><strong>⚠ Common mistakes</strong><ul>
+          <li>Reporting the mean when asked for the median (or forgetting to sort first).</li>
+          <li>Thinking bigger numbers automatically mean a bigger standard deviation — it's about spread.</li>
+          <li>Adding probabilities of independent events instead of multiplying.</li>
+        </ul></div>
+      </article>
+
+      <div class="practice-head"><h2>Practice — Quant</h2><div class="line"></div></div>
+      <p class="practice-intro">Twenty questions across the chapters above. Each gives instant feedback and explains why the wrong answers are wrong. Results feed your dashboard automatically.</p>
+      <div class="practice" data-quiz="quant"></div>
+      <div class="footnote">Practice items are original, GMAT Focus–style questions for skill-building. For official scoring, pair this with GMAC's Official Guide and official practice exams.</div>
+    </section>
+
+    <!-- ===================== VERBAL ===================== -->
+    <section data-prog="gmat" class="view" id="view-verbal">
+      <span class="eyebrow" style="background:var(--verbal-bg);color:var(--verbal)">Verbal Reasoning</span>
+      <h1 class="page">Verbal, made logical</h1>
+      <p class="sub">Two question types: Critical Reasoning and Reading Comprehension. (The Focus edition removed Sentence Correction.) No outside knowledge is needed — only precise reading and clear reasoning.</p>
+      <div class="toc">
+        <a href="#ch-v1">1 · How Verbal works</a>
+        <a href="#ch-v2">2 · Critical Reasoning</a>
+        <a href="#ch-v3">3 · Reading Comprehension</a>
+      </div>
+
+      <article class="chapter" id="ch-v1">
+        <div class="ch-head"><div class="ch-title"><div class="ch-num" style="background:var(--verbal)">1</div><h2>How Verbal works</h2></div><button class="review-btn" data-review="ch-v1">Mark reviewed</button></div>
+        <p>You face short argument passages (Critical Reasoning) and longer reading passages (Reading Comprehension). Both reward the same habit: read for <strong>structure</strong>, not for memory. Identify what the author is claiming and how the pieces support it.</p>
+        <div class="keyidea"><strong>The golden rule</strong> The correct answer is always provable from the text. If you must bring in your own assumptions or world knowledge to defend a choice, it is wrong.</div>
+        <p>Wrong answers fall into recognizable buckets: too extreme (always, never, only), out of scope, half-right then half-wrong, or true-but-irrelevant. Naming the flaw helps you eliminate fast.</p>
+      </article>
+
+      <article class="chapter" id="ch-v2">
+        <div class="ch-head"><div class="ch-title"><div class="ch-num" style="background:var(--verbal)">2</div><h2>Critical Reasoning</h2></div><button class="review-btn" data-review="ch-v2">Mark reviewed</button></div>
+        <p>Every argument has three parts. Find the <strong>conclusion</strong> first — the point the author wants you to accept. The <strong>evidence</strong> (premises) supports it. Bridging them is an unstated <strong>assumption</strong>.</p>
+        <div class="formula"><span class="flabel">Structure</span>Evidence  +  (Assumption)   →   Conclusion</div>
+        <h3>The question types</h3>
+        <table class="tbl"><thead><tr><th>Type</th><th>Your job</th></tr></thead><tbody>
+          <tr><td>Assumption</td><td>Find the missing link the argument needs. Test by negating it — if the argument falls apart, that's the assumption.</td></tr>
+          <tr><td>Strengthen</td><td>Add support, confirm the assumption, or rule out an alternative cause.</td></tr>
+          <tr><td>Weaken</td><td>Break the link — usually by offering an alternative explanation. You needn't disprove the conclusion, just make it less likely.</td></tr>
+          <tr><td>Inference</td><td>Pick what <em>must</em> be true from the statements. Stay close to the text; avoid extremes.</td></tr>
+          <tr><td>Flaw / Evaluate</td><td>Name the reasoning error, or find what would test the argument.</td></tr>
+        </tbody></table>
+        <div class="keyidea"><strong>The GMAT's favorite trap</strong> Treating correlation as causation. "B happened after A, so A caused B" ignores other possible causes. Most Weaken answers exploit exactly this.</div>
+        <details class="worked"><summary><span class="wx-tag">Worked example</span> The negation test for an assumption</summary>
+          <div class="wx-body"><ol class="steps">
+            <li><strong>Argument:</strong> "Company X will profit by moving manufacturing overseas, where labor costs are 40% lower."</li>
+            <li>Conclusion = it will profit. Evidence = labor is cheaper. The gap: cheaper labor must actually reach the bottom line.</li>
+            <li>Candidate assumption: "Other costs (shipping, tariffs, quality) won't offset the labor savings."</li>
+            <li>Negate it: "Other costs WILL offset the savings." Now the argument collapses — so this is a required assumption. <span class="ans">Negation breaks it = it's the assumption.</span></li>
+          </ol></div>
+        </details>
+        <div class="mistake"><strong>⚠ Common mistakes</strong><ul>
+          <li>Picking an answer that is true in the real world but not supported by this argument.</li>
+          <li>Choosing a strong, sweeping statement when the argument only needs a modest one.</li>
+          <li>On Weaken/Strengthen, ignoring the conclusion and reacting to the evidence alone.</li>
+        </ul></div>
+      </article>
+
+      <article class="chapter" id="ch-v3">
+        <div class="ch-head"><div class="ch-title"><div class="ch-num" style="background:var(--verbal)">3</div><h2>Reading Comprehension</h2></div><button class="review-btn" data-review="ch-v3">Mark reviewed</button></div>
+        <p>Don't try to memorize details. As you read, build a mental map: <em>What is the main point? What is each paragraph doing? Is the author neutral, critical, or advocating?</em> Then return to the text for specifics.</p>
+        <table class="tbl"><thead><tr><th>Question</th><th>Approach</th></tr></thead><tbody>
+          <tr><td>Main idea</td><td>Choose the option covering the <em>whole</em> passage and matching the author's tone (rarely extreme).</td></tr>
+          <tr><td>Detail</td><td>Go back and find the line. Never answer from memory.</td></tr>
+          <tr><td>Inference</td><td>Unstated but directly supported. Avoid choices that reach beyond the text.</td></tr>
+          <tr><td>Function ("why mention X?")</td><td>Answer with the role the detail plays, not what it literally says.</td></tr>
+        </tbody></table>
+        <div class="keyidea"><strong>Tone words matter</strong> Note whether the author endorses, criticizes, or merely reports. A correct main-idea answer almost never overstates the author's stance.</div>
+        <div class="mistake"><strong>⚠ Common mistakes</strong><ul>
+          <li>Picking a choice that's true of one paragraph as the "main idea" of the whole passage.</li>
+          <li>Choosing answers with extreme words (all, never, proves) when the passage is measured.</li>
+          <li>Answering detail questions from memory instead of rereading the relevant line.</li>
+        </ul></div>
+      </article>
+
+      <div class="practice-head"><h2>Practice — Verbal</h2><div class="line"></div></div>
+      <p class="practice-intro">Critical Reasoning and Reading Comprehension, including a full passage. Instant feedback with full reasoning on every choice.</p>
+      <div class="practice" data-quiz="verbal"></div>
+      <div class="footnote">Passages and questions are original, written for skill-building.</div>
+    </section>
+
+    <!-- ===================== DATA INSIGHTS ===================== -->
+    <section data-prog="gmat" class="view" id="view-di">
+      <span class="eyebrow" style="background:var(--di-bg);color:var(--di)">Data Insights</span>
+      <h1 class="page">Data Insights, decoded</h1>
+      <p class="sub">The newest section, and the one many programs watch closely. It blends quant and verbal: read data, judge what's enough, and combine sources. Math stays light; interpretation is everything.</p>
+      <div class="toc">
+        <a href="#ch-d1">1 · The five question types</a>
+        <a href="#ch-d2">2 · Data Sufficiency</a>
+        <a href="#ch-d3">3 · Tables, graphs &amp; multi-source</a>
+      </div>
+
+      <article class="chapter" id="ch-d1">
+        <div class="ch-head"><div class="ch-title"><div class="ch-num" style="background:var(--di)">1</div><h2>The five question types</h2></div><button class="review-btn" data-review="ch-d1">Mark reviewed</button></div>
+        <table class="tbl"><thead><tr><th>Type</th><th>What it asks</th></tr></thead><tbody>
+          <tr><td>Data Sufficiency</td><td>Not "what's the answer" but "is there <em>enough</em> information to answer?"</td></tr>
+          <tr><td>Two-Part Analysis</td><td>Pick one answer in each of two columns, often linked by a constraint.</td></tr>
+          <tr><td>Table Analysis</td><td>A sortable table; judge several true/false statements.</td></tr>
+          <tr><td>Graphics Interpretation</td><td>Read a chart and complete fill-in-the-blank statements.</td></tr>
+          <tr><td>Multi-Source Reasoning</td><td>Two or three tabs of info; often you must combine them.</td></tr>
+        </tbody></table>
+      </article>
+
+      <article class="chapter" id="ch-d2">
+        <div class="ch-head"><div class="ch-title"><div class="ch-num" style="background:var(--di)">2</div><h2>Data Sufficiency — the discipline</h2></div><button class="review-btn" data-review="ch-d2">Mark reviewed</button></div>
+        <p>This format confuses people because you are <strong>not solving</strong> for a number — you are deciding whether each statement gives <em>enough</em> to answer. The five answer choices never change. Memorize them:</p>
+        <div class="formula"><span class="flabel">The 5 answers</span>(A) Statement (1) ALONE is sufficient, (2) is not.
+(B) Statement (2) ALONE is sufficient, (1) is not.
+(C) BOTH together are sufficient, NEITHER alone.
+(D) EACH alone is sufficient.
+(E) Together they are STILL not sufficient.</div>
+        <div class="keyidea"><strong>Method</strong> Evaluate each statement on its own first — never carry information from statement 1 into statement 2. For a yes/no question, "sufficient" means it always gives the same answer (even if that answer is always "no"). For a value question, it must pin down exactly one value.</div>
+        <details class="worked"><summary><span class="wx-tag">Worked example</span> Is x &gt; 0?  (1) x² &gt; 0   (2) x³ &gt; 0</summary>
+          <div class="wx-body"><ol class="steps">
+            <li>Statement (1): x² &gt; 0 only tells you x ≠ 0. x could be +3 or −3 → can't answer. Not sufficient.</li>
+            <li>Statement (2): x³ &gt; 0. A negative cubed is negative, so x must be positive. Always "yes" → sufficient.</li>
+            <li>(2) alone works, (1) doesn't → answer <span class="ans">(B)</span>.</li>
+          </ol></div>
+        </details>
+        <div class="mistake"><strong>⚠ Common mistakes</strong><ul>
+          <li>Treating x² &gt; 0 as "x is positive" — squaring hides the sign.</li>
+          <li>Letting information from statement 1 leak into your read of statement 2.</li>
+          <li>Jumping to (C) without checking whether each statement works alone first.</li>
+        </ul></div>
+      </article>
+
+      <article class="chapter" id="ch-d3">
+        <div class="ch-head"><div class="ch-title"><div class="ch-num" style="background:var(--di)">3</div><h2>Tables, graphs &amp; multi-source</h2></div><button class="review-btn" data-review="ch-d3">Mark reviewed</button></div>
+        <p>These give you data and ask you to read it carefully. The trap is rarely the math — it's misreading the chart or grabbing the wrong row.</p>
+        <ul>
+          <li><strong>Always read the axes, units, and labels first.</strong> Is it dollars or thousands of dollars? Percent or count?</li>
+          <li><strong>Normalize before comparing.</strong> "Per rep," "per capita," and percentage change can flip a ranking versus raw totals.</li>
+          <li><strong>Correlation isn't causation.</strong> A chart showing two things rising together does not prove one causes the other.</li>
+          <li><strong>Multi-source:</strong> check whether one tab alone answers the question before assuming you need both.</li>
+        </ul>
+        <figure class="diagram">
+          <svg viewBox="0 0 420 180" width="420"><g font-family="var(--sans)" font-size="11" fill="#2c2823">
+          <line x1="50" y1="20" x2="50" y2="150" stroke="#6a645a"/><line x1="50" y1="150" x2="400" y2="150" stroke="#6a645a"/>
+          <rect x="80" y="90" width="40" height="60" fill="#ecd6b2" stroke="#b1742a"/><rect x="150" y="60" width="40" height="90" fill="#ecd6b2" stroke="#b1742a"/><rect x="220" y="110" width="40" height="40" fill="#ecd6b2" stroke="#b1742a"/><rect x="290" y="40" width="40" height="110" fill="#ecd6b2" stroke="#b1742a"/>
+          <text x="100" y="164" text-anchor="middle">North</text><text x="170" y="164" text-anchor="middle">South</text><text x="240" y="164" text-anchor="middle">East</text><text x="310" y="164" text-anchor="middle">West</text>
+          <text x="30" y="25">$</text></g></svg>
+          <figcaption>A simple bar chart. Before answering, confirm what the height means and whether the question wants totals, rates, or changes.</figcaption>
+        </figure>
+        <details class="worked"><summary><span class="wx-tag">Worked example</span> Reading a discount + shipping rule (multi-source thinking)</summary>
+          <div class="wx-body"><ol class="steps">
+            <li><strong>Rule:</strong> 10% code applies to the subtotal first; orders of $50 or less then pay $6 shipping; over $50 ship free.</li>
+            <li>Cart subtotal = $52. Apply the code: 52 × 0.90 = $46.80.</li>
+            <li>$46.80 is now ≤ $50, so the $6 fee applies: 46.80 + 6 = $52.80.</li>
+            <li>Total = <span class="ans">$52.80</span>. The discount pushed the order back under the free-shipping line — you must use both facts.</li>
+          </ol></div>
+        </details>
+        <div class="mistake"><strong>⚠ Common mistakes</strong><ul>
+          <li>Comparing raw totals when the question asks about a rate or percentage.</li>
+          <li>Misreading units on an axis (thousands vs. ones).</li>
+          <li>Assuming you need both sources before checking whether one settles it.</li>
+        </ul></div>
+      </article>
+
+      <div class="practice-head"><h2>Practice — Data Insights</h2><div class="line"></div></div>
+      <p class="practice-intro">Data Sufficiency, table analysis, graphics interpretation, and multi-source reasoning, with full explanations.</p>
+      <div class="practice" data-quiz="di"></div>
+      <div class="footnote">Practice items are original, GMAT Focus–style questions for skill-building.</div>
+    </section>
+
+    <!-- ===================== FORMULA SHEET ===================== -->
+    <section data-prog="gmat" class="view" id="view-formulas">
+      <span class="eyebrow" style="background:var(--paper-2);color:var(--formula)">Reference</span>
+      <h1 class="page">Formula &amp; rules sheet</h1>
+      <p class="sub">Everything worth memorizing, in one scannable place. Skim this the morning of the test.</p>
+
+      <div class="sheet-sec">
+        <h2><span class="swatch" style="background:var(--quant)"></span>Quant</h2>
+        <div class="sheet-grid">
+          <div class="sheet-card"><h4>Percents</h4><div class="eqbox">
+            <div class="eq"><i>x</i>% of <i>N</i> = <span class="frac"><span><i>x</i></span><span>100</span></span> · <i>N</i></div>
+            <div class="eq">% change = <span class="frac"><span>new − old</span><span>old</span></span></div>
+            <div class="eq"><span class="eqnote">successive %: multiply the factors</span></div>
+          </div></div>
+          <div class="sheet-card"><h4>Exponents</h4><div class="eqbox">
+            <div class="eq"><i>x</i><sup>a</sup> · <i>x</i><sup>b</sup> = <i>x</i><sup>a+b</sup></div>
+            <div class="eq"><span class="frac"><span><i>x</i><sup>a</sup></span><span><i>x</i><sup>b</sup></span></span> = <i>x</i><sup>a−b</sup></div>
+            <div class="eq">(<i>x</i><sup>a</sup>)<sup>b</sup> = <i>x</i><sup>ab</sup></div>
+            <div class="eq"><i>x</i><sup>0</sup> = 1&nbsp;&nbsp;&nbsp;<i>x</i><sup>−n</sup> = <span class="frac"><span>1</span><span><i>x</i><sup>n</sup></span></span></div>
+          </div></div>
+          <div class="sheet-card"><h4>Algebra</h4><div class="eqbox">
+            <div class="eq"><i>a</i><sup>2</sup> − <i>b</i><sup>2</sup> = (<i>a</i>+<i>b</i>)(<i>a</i>−<i>b</i>)</div>
+            <div class="eq"><i>x</i><sup>2</sup> + (<i>p</i>+<i>q</i>)<i>x</i> + <i>pq</i> = (<i>x</i>+<i>p</i>)(<i>x</i>+<i>q</i>)</div>
+            <div class="eq"><i>x</i> = <span class="frac"><span>−<i>b</i> ± √<span class="sqrt"><i>b</i><sup>2</sup> − 4<i>ac</i></span></span><span>2<i>a</i></span></span></div>
+          </div></div>
+          <div class="sheet-card"><h4>Parity &amp; primes</h4><ul><li>even ± even = even; odd ± odd = even</li><li><i>n</i>(<i>n</i>+1) is always even</li><li>2 = only even prime; 1 isn't prime</li></ul></div>
+          <div class="sheet-card"><h4>Rate / work / average</h4><div class="eqbox">
+            <div class="eq">distance = rate × time</div>
+            <div class="eq">combined rate = <span class="frac"><span>1</span><span><i>a</i></span></span> + <span class="frac"><span>1</span><span><i>b</i></span></span></div>
+            <div class="eq">sum = average × count</div>
+          </div></div>
+          <div class="sheet-card"><h4>Sets &amp; stats</h4><div class="eqbox">
+            <div class="eq">Total = <i>A</i> + <i>B</i> − both + neither</div>
+            <div class="eq">median = middle value (sorted)</div>
+            <div class="eq"><span class="eqnote">SD = spread; equal values → 0</span></div>
+          </div></div>
+          <div class="sheet-card"><h4>Probability</h4><div class="eqbox">
+            <div class="eq"><i>P</i> = <span class="frac"><span>favorable</span><span>total</span></span></div>
+            <div class="eq"><i>P</i>(<i>A</i> and <i>B</i>) = <i>P</i>(<i>A</i>) · <i>P</i>(<i>B</i>)</div>
+            <div class="eq"><i>P</i>(<i>A</i> or <i>B</i>) = <i>P</i>(<i>A</i>) + <i>P</i>(<i>B</i>)</div>
+            <div class="eq"><i>P</i>(not <i>A</i>) = 1 − <i>P</i>(<i>A</i>)</div>
+          </div></div>
+          <div class="sheet-card"><h4>Fraction ↔ %</h4><div class="eqbox">
+            <div class="eq"><span class="frac"><span>1</span><span>2</span></span> = 50%&nbsp;&nbsp; <span class="frac"><span>1</span><span>3</span></span> ≈ 33⅓%&nbsp;&nbsp; <span class="frac"><span>1</span><span>4</span></span> = 25%</div>
+            <div class="eq"><span class="frac"><span>1</span><span>5</span></span> = 20%&nbsp;&nbsp; <span class="frac"><span>1</span><span>8</span></span> = 12.5%&nbsp;&nbsp; <span class="frac"><span>1</span><span>6</span></span> ≈ 16⅔%</div>
+          </div></div>
+        </div>
+      </div>
+
+      <div class="sheet-sec">
+        <h2><span class="swatch" style="background:var(--verbal)"></span>Verbal</h2>
+        <div class="sheet-grid">
+          <div class="sheet-card"><h4>CR argument map</h4><div class="eqbox"><div class="eq">Evidence + Assumption → Conclusion</div></div><ul><li>Assumption: negate it; if argument breaks, it's required.</li><li>Weaken: alternative cause.</li><li>Strengthen: rule out alternatives.</li></ul></div>
+          <div class="sheet-card"><h4>Wrong-answer types</h4><ul><li>Too extreme (all/never/proves)</li><li>Out of scope</li><li>Half-right / half-wrong</li><li>True but irrelevant</li></ul></div>
+          <div class="sheet-card"><h4>RC habits</h4><ul><li>Map structure &amp; tone, not details</li><li>Main idea = whole passage, modest tone</li><li>Detail = reread the line</li><li>Inference = supported, not beyond text</li></ul></div>
+        </div>
+      </div>
+
+      <div class="sheet-sec">
+        <h2><span class="swatch" style="background:var(--di)"></span>Data Insights</h2>
+        <div class="sheet-grid">
+          <div class="sheet-card"><h4>Data Sufficiency answers</h4><ul><li>(A) 1 alone</li><li>(B) 2 alone</li><li>(C) both, not either alone</li><li>(D) each alone</li><li>(E) not even together</li></ul></div>
+          <div class="sheet-card"><h4>DS method</h4><ul><li>Test each statement alone first</li><li>Yes/No: consistent answer = sufficient</li><li>Value: must pin one value</li><li>x²&gt;0 ⇒ x≠0, not x&gt;0</li></ul></div>
+          <div class="sheet-card"><h4>Charts &amp; tables</h4><ul><li>Read axes &amp; units first</li><li>Normalize before comparing</li><li>Correlation ≠ causation</li><li>Check one source before assuming you need both</li></ul></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== STRATEGY ===================== -->
+    <section data-prog="gmat" class="view" id="view-strategy">
+      <span class="eyebrow" style="background:var(--strategy-bg);color:var(--strategy)">Game plan</span>
+      <h1 class="page">Strategy &amp; test day</h1>
+      <p class="sub">Structure, pacing, and the habits that actually move scores — plus context for the Booth/Columbia goal.</p>
+
+      <div class="card"><h2>The exam at a glance</h2>
+        <p>The GMAT Focus Edition runs <strong>2 hours 15 minutes</strong>: three sections of <strong>45 minutes</strong> each — Quantitative (21 questions), Verbal (23), and Data Insights (20). The total score scale is <strong>205–805</strong>. You may take the sections in any order, with one optional break.</p>
+        <p>A standout feature: you can <strong>bookmark questions and edit up to three answers per section</strong> at the end. Leave a little time to use it.</p>
+      </div>
+      <div class="card"><h2>Pacing</h2>
+        <ul>
+          <li><strong>Quant:</strong> 45 ÷ 21 ≈ <strong>2:08</strong> per question.</li>
+          <li><strong>Verbal:</strong> 45 ÷ 23 ≈ <strong>1:57</strong> per question — reading passages eat into this, so read efficiently.</li>
+          <li><strong>Data Insights:</strong> 45 ÷ 20 = <strong>2:15</strong>, but multi-part items run long, so move fast on single ones.</li>
+        </ul>
+        <p>It's computer-adaptive, and unanswered questions hurt you. <strong>Never leave one blank</strong> — guess and move on. Don't sink five minutes into a single problem.</p>
+      </div>
+      <div class="card"><h2>The error log — your highest-leverage habit</h2>
+        <p>For every question you miss <em>or</em> guess, record four things: the question, the topic, <strong>why</strong> you got it wrong (concept gap? careless? timing? misread?), and the correct approach. Review weekly. Most score gains come from killing repeated error <em>types</em>, not from grinding new questions. This app tracks your accuracy automatically — but you write down the <em>why</em>.</p>
+      </div>
+      <div class="card"><h2>Booth &amp; Columbia context</h2>
+        <p>Both schools are highly selective, with admitted-student scores clustering near the top of the range. A strong GMAT keeps you in the conversation, but essays, work experience, and recommendations carry real weight too.</p>
+        <p>Because medians and test policies change every cycle, confirm each school's <em>current</em> class profile and any GRE/test-optional policies directly on their admissions pages before setting a target. Clear the median comfortably, then pour energy into the rest of the application.</p>
+        <p style="color:var(--ink-faint);font-size:13px;">Note: this playbook builds GMAT skills; it does not pull live admissions data. Verify those figures on the official Booth and Columbia sites.</p>
+      </div>
+    </section>
+
+    <!-- ===================== CFA DASHBOARD ===================== -->
+    <section data-prog="cfa" class="view" id="view-cfa-dashboard">
+      <span class="eyebrow" style="background:var(--gold-soft);color:var(--gold)">Chartered path</span>
+      <h1 class="page">CFA Level I — Dashboard</h1>
+      <p class="sub">Your charter starts here. Book 1 (Quantitative Methods &amp; Economics) is built out in full, teach-from-scratch. The Roadmap shows all ten topics so you always see the whole journey. Progress saves automatically.</p>
+      <div id="dash-body-cfa"></div>
+    </section>
+
+    <!-- ===================== CFA ROADMAP ===================== -->
+    <section data-prog="cfa" class="view" id="view-cfa-roadmap">
+      <span class="eyebrow" style="background:var(--gold-soft);color:var(--gold)">The whole journey</span>
+      <h1 class="page">Level I roadmap — all 10 topics</h1>
+      <p class="sub">The CFA Level I exam covers ten topic areas. The two from your uploaded Book 1 are built and ready; the rest become available as you add Books 2–5. Percentages are approximate exam weights — confirm the current weights on the CFA Institute site, as they change.</p>
+      <div class="rmap">
+        <div class="rmap-card" style="border-top-color:#56477f"><h4>1 · Ethics &amp; Professional Standards <span class="wpill">15–20%</span></h4><p>The Code &amp; Standards, GIPS. The single heaviest topic — and the tie-breaker if you're near the line.</p><span class="status soon">Needs Book 1 (Ethics vol.)</span></div>
+        <div class="rmap-card" style="border-top-color:#1f4e79"><h4>2 · Quantitative Methods <span class="wpill">6–9%</span></h4><p>Returns, time value of money, statistics, probability, distributions, hypothesis testing, regression.</p><span class="status live">Built &amp; ready</span></div>
+        <div class="rmap-card" style="border-top-color:#2f6f54"><h4>3 · Economics <span class="wpill">6–9%</span></h4><p>Market structures, business cycles, fiscal &amp; monetary policy, international trade, and currency exchange rates.</p><span class="status live">Built &amp; ready</span></div>
+        <div class="rmap-card" style="border-top-color:#9a6a1e"><h4>4 · Financial Statement Analysis <span class="wpill">11–14%</span></h4><p>Income statement, balance sheet, cash flows, ratios, inventories, long-lived assets, income taxes.</p><span class="status soon">Needs Book 3</span></div>
+        <div class="rmap-card" style="border-top-color:#b0463b"><h4>5 · Corporate Issuers <span class="wpill">6–9%</span></h4><p>Governance, capital structure, working capital, the cost of capital, capital investments.</p><span class="status soon">Needs Book 3</span></div>
+        <div class="rmap-card" style="border-top-color:#1f4e79"><h4>6 · Equity Investments <span class="wpill">11–14%</span></h4><p>Market organization, indexes, market efficiency, equity valuation models.</p><span class="status soon">Needs Book 4</span></div>
+        <div class="rmap-card" style="border-top-color:#2f6f54"><h4>7 · Fixed Income <span class="wpill">11–14%</span></h4><p>Bond features, pricing, yield measures, duration &amp; convexity, securitized products, credit risk.</p><span class="status soon">Needs Book 4</span></div>
+        <div class="rmap-card" style="border-top-color:#9a6a1e"><h4>8 · Derivatives <span class="wpill">5–8%</span></h4><p>Forwards, futures, swaps, options; arbitrage and the basics of pricing &amp; valuation.</p><span class="status soon">Needs Book 5</span></div>
+        <div class="rmap-card" style="border-top-color:#b0463b"><h4>9 · Alternative Investments <span class="wpill">7–10%</span></h4><p>Real estate, private equity/debt, hedge funds, commodities, infrastructure.</p><span class="status soon">Needs Book 5</span></div>
+        <div class="rmap-card" style="border-top-color:#56477f"><h4>10 · Portfolio Management <span class="wpill">8–12%</span></h4><p>Portfolio risk &amp; return, the efficient frontier, CAPM, the planning process, fintech.</p><span class="status soon">Needs Book 5</span></div>
+      </div>
+      <div class="keyidea" style="margin-top:18px"><strong>How to use the weights</strong> Ethics, FSA, Equity, and Fixed Income together are roughly half the exam — prioritize them once unlocked. Quant and Econ (built here) are the analytical backbone everything else leans on, so mastering them now pays off across the whole curriculum.</div>
+      <div class="footnote">Topic weights are approximate and set by CFA Institute each cycle — verify the current ranges at cfainstitute.org. This app teaches concepts in original wording and is not affiliated with or endorsed by CFA Institute or Kaplan Schweser.</div>
+    </section>
+    <!-- ===================== CFA QUANT METHODS ===================== -->
+    <section data-prog="cfa" class="view" id="view-cfa-qm">
+      <span class="eyebrow" style="background:var(--quant-bg);color:var(--quant)">Book 1 · Topic 2</span>
+      <h1 class="page">Quantitative Methods</h1>
+      <p class="sub">The toolkit behind every other topic: how to measure return, value cash flows over time, describe data, reason about uncertainty, and test ideas with statistics.</p>
+      <div class="toc">
+        <a href="#ch-cfa-qm-1">1 · Rates &amp; returns</a>
+        <a href="#ch-cfa-qm-2">2 · Time value of money</a>
+        <a href="#ch-cfa-qm-3">3 · Statistical measures</a>
+        <a href="#ch-cfa-qm-4">4 · Probability</a>
+        <a href="#ch-cfa-qm-5">5 · Distributions &amp; sampling</a>
+        <a href="#ch-cfa-qm-6">6 · Hypothesis testing &amp; regression</a>
+      </div>
+
+      <article class="chapter" id="ch-cfa-qm-1">
+        <div class="ch-head"><div class="ch-title"><div class="ch-num" style="background:var(--quant)">1</div><h2>Rates &amp; returns</h2></div><button class="review-btn" data-review="ch-cfa-qm-1">Mark reviewed</button></div>
+        <p>An interest rate can be read three equivalent ways: a <strong>required rate of return</strong>, a <strong>discount rate</strong> that converts future money to today, or an <strong>opportunity cost</strong> of spending now. A market interest rate stacks up from building blocks.</p>
+        <div class="eqbox">
+          <div class="eq">required return = real risk-free + inflation premium + default + liquidity + maturity premiums</div>
+          <div class="eq">(1 + nominal) = (1 + real)(1 + inflation)</div>
+        </div>
+        <h3>Measuring a single period</h3>
+        <div class="eqbox"><div class="eq">HPR = <span class="frac"><span><i>P</i><sub>1</sub> − <i>P</i><sub>0</sub> + income</span><span><i>P</i><sub>0</sub></span></span></div></div>
+        <details class="worked"><summary><span class="wx-tag">Worked example</span> Holding period return</summary>
+          <div class="wx-body"><ol class="steps">
+            <li>Buy a share at <i>P</i><sub>0</sub> = $50; it pays a $2 dividend; you sell at <i>P</i><sub>1</sub> = $55.</li>
+            <li>HPR = (55 − 50 + 2) / 50 = 7 / 50.</li>
+            <li>= <span class="ans">14%</span>.</li>
+          </ol></div>
+        </details>
+        <h3>Averaging returns over time</h3>
+        <p>The <strong>arithmetic mean</strong> is the simple average. The <strong>geometric mean</strong> is the true compound growth rate and is always ≤ the arithmetic mean (equal only if every return is identical).</p>
+        <div class="eqbox"><div class="eq">geometric mean = [ (1+<i>R</i><sub>1</sub>)(1+<i>R</i><sub>2</sub>)…(1+<i>R</i><sub>n</sub>) ]<sup>1/n</sup> − 1</div></div>
+        <details class="worked"><summary><span class="wx-tag">Worked example</span> Why +50% then −50% is not break-even</summary>
+          <div class="wx-body"><ol class="steps">
+            <li>Arithmetic mean = (50% + (−50%)) / 2 = 0%.</li>
+            <li>But $100 → $150 → $75. You actually lost money.</li>
+            <li>Geometric = √(1.50 × 0.50) − 1 = √0.75 − 1 ≈ <span class="ans">−13.4%</span> — the honest compound return.</li>
+          </ol></div>
+        </details>
+        <h3>Money-weighted vs time-weighted</h3>
+        <p>The <strong>money-weighted return (MWR)</strong> is the IRR of the portfolio's cash flows — it's affected by <em>when</em> you add or withdraw money. The <strong>time-weighted return (TWR)</strong> chains sub-period returns and removes the effect of cash-flow timing, so it's the standard for judging a <em>manager's</em> skill.</p>
+        <p>To annualize a sub-period return, compound it: annualized = (1 + period return)<sup>periods/year</sup> − 1. The continuously compounded return is ln(1 + HPR).</p>
+        <div class="mistake"><strong>⚠ Common mistakes</strong><ul>
+          <li>Quoting the arithmetic mean as the growth you actually earned over multiple periods — use the geometric mean.</li>
+          <li>Comparing managers with money-weighted returns; client deposits/withdrawals distort it. Use time-weighted.</li>
+          <li>Annualizing by simply multiplying (×4 a quarterly return) instead of compounding.</li>
+        </ul></div>
+      </article>
+
+      <article class="chapter" id="ch-cfa-qm-2">
+        <div class="ch-head"><div class="ch-title"><div class="ch-num" style="background:var(--quant)">2</div><h2>Time value of money</h2></div><button class="review-btn" data-review="ch-cfa-qm-2">Mark reviewed</button></div>
+        <p>A dollar today is worth more than a dollar tomorrow because it can earn a return. Everything in valuation is moving cash flows across time with one discount rate.</p>
+        <div class="eqbox">
+          <div class="eq"><i>FV</i> = <i>PV</i>(1 + <i>r</i>)<sup>n</sup>&nbsp;&nbsp;&nbsp;<i>PV</i> = <span class="frac"><span><i>FV</i></span><span>(1 + <i>r</i>)<sup>n</sup></span></span></div>
+          <div class="eq"><i>PV</i> annuity = <i>A</i> · <span class="frac"><span>1 − (1 + <i>r</i>)<sup>−n</sup></span><span><i>r</i></span></span></div>
+          <div class="eq">perpetuity = <span class="frac"><span><i>A</i></span><span><i>r</i></span></span>&nbsp;&nbsp;&nbsp;growing perpetuity = <span class="frac"><span><i>A</i><sub>1</sub></span><span><i>r</i> − <i>g</i></span></span></div>
+        </div>
+        <details class="worked"><summary><span class="wx-tag">Worked example</span> Future value of a lump sum</summary>
+          <div class="wx-body"><ol class="steps">
+            <li>Invest $1,000 at 6% for 3 years, compounded annually.</li>
+            <li><i>FV</i> = 1,000 × (1.06)<sup>3</sup> = 1,000 × 1.191016.</li>
+            <li>= <span class="ans">$1,191.02</span>.</li>
+          </ol></div>
+        </details>
+        <details class="worked"><summary><span class="wx-tag">Worked example</span> Valuing a perpetuity (preferred stock)</summary>
+          <div class="wx-body"><ol class="steps">
+            <li>A preferred share pays $5 per year forever; investors require 8%.</li>
+            <li>Value = <i>A</i> / <i>r</i> = 5 / 0.08.</li>
+            <li>= <span class="ans">$62.50</span>. A growing dividend would use <i>A</i><sub>1</sub>/(<i>r</i> − <i>g</i>), the Gordon model.</li>
+          </ol></div>
+        </details>
+        <div class="keyidea"><strong>NPV &amp; IRR</strong> NPV discounts all project cash flows at the required return and sums them; accept if NPV &gt; 0. The IRR is the rate that makes NPV = 0. Cash flows are additive — you can value pieces separately and add.</div>
+        <div class="mistake"><strong>⚠ Common mistakes</strong><ul>
+          <li>Mismatching the rate and the period — a monthly cash flow needs a monthly rate and <i>n</i> in months.</li>
+          <li>Confusing an ordinary annuity (payments at period end) with an annuity due (payments at the start).</li>
+        </ul></div>
+      </article>
+
+      <article class="chapter" id="ch-cfa-qm-3">
+        <div class="ch-head"><div class="ch-title"><div class="ch-num" style="background:var(--quant)">3</div><h2>Statistical measures of returns</h2></div><button class="review-btn" data-review="ch-cfa-qm-3">Mark reviewed</button></div>
+        <p>We describe a return series by its <strong>center</strong> (mean, median, mode) and its <strong>spread</strong> (variance, standard deviation). Spread is risk.</p>
+        <div class="eqbox">
+          <div class="eq">sample variance <i>s</i><sup>2</sup> = <span class="frac"><span>Σ(<i>x</i><sub>i</sub> − <span style="border-top:1.4px solid">x</span>)<sup>2</sup></span><span><i>n</i> − 1</span></span>&nbsp;&nbsp; <i>SD</i> = √<span class="sqrt"><i>s</i><sup>2</sup></span></div>
+          <div class="eq">CV = <span class="frac"><span>SD</span><span>mean</span></span>&nbsp;&nbsp;&nbsp;Sharpe = <span class="frac"><span><i>R</i><sub>p</sub> − <i>R</i><sub>f</sub></span><span><i>σ</i><sub>p</sub></span></span></div>
+          <div class="eq">correlation <i>ρ</i> = <span class="frac"><span>cov(<i>x</i>,<i>y</i>)</span><span><i>σ</i><sub>x</sub> <i>σ</i><sub>y</sub></span></span>,&nbsp; −1 ≤ <i>ρ</i> ≤ +1</div>
+        </div>
+        <p><strong>Sample vs population:</strong> a sample variance divides by <i>n</i> − 1 (not <i>n</i>) to correct for using an estimate of the mean. The <strong>coefficient of variation</strong> measures risk per unit of return — lower is better. The <strong>Sharpe ratio</strong> measures excess return per unit of risk — higher is better.</p>
+        <h3>Shape: skewness &amp; kurtosis</h3>
+        <figure class="diagram">
+          <svg viewBox="0 0 440 120" width="440"><g fill="none" stroke-width="2">
+          <path d="M20 95 C 70 95, 90 25, 130 25 S 200 95, 250 95" stroke="#1f4e79"/>
+          <path d="M250 95 C 300 95, 350 25, 390 25 S 410 95, 420 95" stroke="#9a6a1e"/></g>
+          <g font-family="sans-serif" font-size="12" fill="#52617a"><text x="80" y="113">right (positive) skew</text><text x="300" y="113">left (negative) skew</text></g></svg>
+          <figcaption>Right skew has a long right tail (mean &gt; median); left skew has a long left tail (mean &lt; median).</figcaption>
+        </figure>
+        <p><strong>Skewness</strong> measures asymmetry. <strong>Kurtosis</strong> measures tail-heaviness: <em>leptokurtic</em> (fat tails, excess kurtosis &gt; 0) means more extreme outcomes than a normal distribution — important for risk. Excess kurtosis = kurtosis − 3.</p>
+        <div class="mistake"><strong>⚠ Common mistakes</strong><ul>
+          <li>Dividing by <i>n</i> for a sample variance — use <i>n</i> − 1.</li>
+          <li>Judging an investment by return alone; use CV or Sharpe to account for risk.</li>
+          <li>Reversing skew direction — the skew is named for the side with the long tail.</li>
+        </ul></div>
+      </article>
+
+      <article class="chapter" id="ch-cfa-qm-4">
+        <div class="ch-head"><div class="ch-title"><div class="ch-num" style="background:var(--quant)">4</div><h2>Probability &amp; expected value</h2></div><button class="review-btn" data-review="ch-cfa-qm-4">Mark reviewed</button></div>
+        <div class="eqbox">
+          <div class="eq"><i>P</i>(<i>A</i> or <i>B</i>) = <i>P</i>(<i>A</i>) + <i>P</i>(<i>B</i>) − <i>P</i>(<i>AB</i>)</div>
+          <div class="eq"><i>P</i>(<i>AB</i>) = <i>P</i>(<i>A</i>|<i>B</i>) · <i>P</i>(<i>B</i>)&nbsp;&nbsp;(independent: <i>P</i>(<i>A</i>)·<i>P</i>(<i>B</i>))</div>
+          <div class="eq">Bayes: <i>P</i>(<i>A</i>|<i>B</i>) = <span class="frac"><span><i>P</i>(<i>B</i>|<i>A</i>) · <i>P</i>(<i>A</i>)</span><span><i>P</i>(<i>B</i>)</span></span></div>
+          <div class="eq">E(<i>X</i>) = Σ <i>p</i><sub>i</sub> <i>x</i><sub>i</sub></div>
+        </div>
+        <details class="worked"><summary><span class="wx-tag">Worked example</span> Expected return</summary>
+          <div class="wx-body"><ol class="steps">
+            <li>Outcomes: +20% (prob 0.3), +5% (prob 0.5), −10% (prob 0.2).</li>
+            <li>E(R) = 0.3(20) + 0.5(5) + 0.2(−10) = 6 + 2.5 − 2.</li>
+            <li>= <span class="ans">6.5%</span>.</li>
+          </ol></div>
+        </details>
+        <h3>Portfolio mathematics</h3>
+        <div class="eqbox">
+          <div class="eq">E(<i>R</i><sub>p</sub>) = <i>w</i><sub>1</sub>E(<i>R</i><sub>1</sub>) + <i>w</i><sub>2</sub>E(<i>R</i><sub>2</sub>)</div>
+          <div class="eq"><i>σ</i><sub>p</sub><sup>2</sup> = <i>w</i><sub>1</sub><sup>2</sup><i>σ</i><sub>1</sub><sup>2</sup> + <i>w</i><sub>2</sub><sup>2</sup><i>σ</i><sub>2</sub><sup>2</sup> + 2<i>w</i><sub>1</sub><i>w</i><sub>2</sub><i>ρ</i><sub>12</sub><i>σ</i><sub>1</sub><i>σ</i><sub>2</sub></div>
+        </div>
+        <div class="keyidea"><strong>The diversification engine</strong> Because of that last term, whenever the correlation <i>ρ</i> &lt; +1, portfolio risk is <em>less</em> than the weighted average of the parts. Lower correlation → more risk reduction. This single idea underlies all of portfolio theory.</div>
+        <div class="mistake"><strong>⚠ Common mistakes</strong><ul>
+          <li>Forgetting the 2·<i>w</i><sub>1</sub><i>w</i><sub>2</sub>·cov term in portfolio variance.</li>
+          <li>Treating dependent events as independent (multiplying probabilities that aren't independent).</li>
+          <li>Averaging the standard deviations of two assets — risk does not average unless <i>ρ</i> = +1.</li>
+        </ul></div>
+      </article>
+
+      <article class="chapter" id="ch-cfa-qm-5">
+        <div class="ch-head"><div class="ch-title"><div class="ch-num" style="background:var(--quant)">5</div><h2>Distributions &amp; sampling</h2></div><button class="review-btn" data-review="ch-cfa-qm-5">Mark reviewed</button></div>
+        <p>The <strong>normal distribution</strong> is symmetric and fully described by its mean and variance. The empirical rule: about <strong>68%</strong> of outcomes lie within ±1 SD, <strong>95%</strong> within ±2, and <strong>99.7%</strong> within ±3.</p>
+        <div class="eqbox">
+          <div class="eq"><i>z</i> = <span class="frac"><span><i>x</i> − <i>μ</i></span><span><i>σ</i></span></span></div>
+          <div class="eq">confidence interval = <span style="border-top:1.4px solid">x</span> ± <i>z</i> · <span class="frac"><span><i>s</i></span><span>√<span class="sqrt"><i>n</i></span></span></span></div>
+        </div>
+        <p>Asset <em>prices</em> are often modeled as <strong>lognormal</strong> (can't go below zero, right-skewed) while continuously compounded <em>returns</em> are modeled as normal. <strong>Roy's safety-first</strong> criterion picks the portfolio that maximizes the safety-first ratio (E(<i>R</i>) − threshold) / <i>σ</i>, i.e. the one least likely to fall below a minimum return.</p>
+        <h3>Sampling &amp; the Central Limit Theorem</h3>
+        <p>The <strong>CLT</strong> says the distribution of the sample mean approaches normal as <i>n</i> grows (rule of thumb <i>n</i> ≥ 30), regardless of the population's shape. The spread of that sample mean is the <strong>standard error</strong>, σ/√<i>n</i>, which shrinks as the sample grows. Common z-values: 1.65 (90%), 1.96 (95%), 2.58 (99%). Use the <strong>t-distribution</strong> for small samples or unknown variance.</p>
+        <details class="worked"><summary><span class="wx-tag">Worked example</span> A 95% confidence interval</summary>
+          <div class="wx-body"><ol class="steps">
+            <li>Sample mean return 8%, sample SD 10%, <i>n</i> = 100.</li>
+            <li>Standard error = 10% / √100 = 1%.</li>
+            <li>95% CI = 8% ± 1.96 × 1% = <span class="ans">6.04% to 9.96%</span>.</li>
+          </ol></div>
+        </details>
+        <div class="mistake"><strong>⚠ Common mistakes</strong><ul>
+          <li>Confusing the standard deviation (spread of data) with the standard error (spread of the sample mean).</li>
+          <li>Using z when the sample is small and variance unknown — use t.</li>
+          <li>Assuming the CLT applies for tiny samples from a non-normal population.</li>
+        </ul></div>
+      </article>
+
+      <article class="chapter" id="ch-cfa-qm-6">
+        <div class="ch-head"><div class="ch-title"><div class="ch-num" style="background:var(--quant)">6</div><h2>Hypothesis testing &amp; regression</h2></div><button class="review-btn" data-review="ch-cfa-qm-6">Mark reviewed</button></div>
+        <p>Hypothesis testing is how we decide whether data support a claim. State a <strong>null</strong> (H<sub>0</sub>, the status quo) and an <strong>alternative</strong> (H<sub>a</sub>), pick a significance level <i>α</i>, compute a test statistic, and decide.</p>
+        <table class="tbl"><thead><tr><th>Decision</th><th>H<sub>0</sub> is true</th><th>H<sub>0</sub> is false</th></tr></thead><tbody>
+          <tr><td>Reject H<sub>0</sub></td><td>Type I error (prob <i>α</i>)</td><td>Correct (power = 1 − <i>β</i>)</td></tr>
+          <tr><td>Fail to reject</td><td>Correct</td><td>Type II error (prob <i>β</i>)</td></tr>
+        </tbody></table>
+        <p>The <strong>p-value</strong> is the smallest significance level at which you'd reject H<sub>0</sub>; reject when p &lt; <i>α</i>. Use a one-tailed test for directional claims, two-tailed otherwise.</p>
+        <h3>Simple linear regression</h3>
+        <div class="eqbox">
+          <div class="eq"><i>Y</i> = <i>b</i><sub>0</sub> + <i>b</i><sub>1</sub><i>X</i> + <i>ε</i></div>
+          <div class="eq">SST = SSR + SSE&nbsp;&nbsp;&nbsp;<i>R</i><sup>2</sup> = <span class="frac"><span>SSR</span><span>SST</span></span></div>
+        </div>
+        <p>The slope <i>b</i><sub>1</sub> says how much <i>Y</i> changes per one-unit change in <i>X</i>. <strong>R²</strong> is the fraction of <i>Y</i>'s variation explained by <i>X</i> (0 to 1). The <strong>ANOVA F-test</strong> assesses the model overall; a t-test assesses the slope.</p>
+        <div class="keyidea"><strong>Fintech &amp; Big Data (brief)</strong> "Big Data" is described by volume, velocity, variety, and veracity. Machine learning finds patterns without explicit rules (supervised vs unsupervised); applications include text/sentiment analysis and algorithmic trading. Know the vocabulary at a conceptual level.</div>
+        <div class="mistake"><strong>⚠ Common mistakes</strong><ul>
+          <li>Swapping Type I (reject a true H<sub>0</sub>) and Type II (fail to reject a false one).</li>
+          <li>Reading a high R² as proof of causation — regression shows association, not cause.</li>
+          <li>Saying you "accept H<sub>0</sub>" — you only ever <em>fail to reject</em> it.</li>
+        </ul></div>
+      </article>
+
+      <div class="practice-head"><h2>Practice — Quant Methods</h2><div class="line"></div></div>
+      <p class="practice-intro">Thirteen questions across the chapters above, each with full explanations and the traps spelled out. Your results feed the CFA dashboard.</p>
+      <div class="practice" data-quiz="qm"></div>
+      <div class="footnote">Original practice questions for skill-building; not affiliated with CFA Institute. For exam-realistic items, use CFA Institute's learning ecosystem and mock exams.</div>
+    </section>
+    <!-- ===================== CFA ECONOMICS ===================== -->
+    <section data-prog="cfa" class="view" id="view-cfa-econ">
+      <span class="eyebrow" style="background:var(--verbal-bg);color:var(--verbal)">Book 1 · Topic 3</span>
+      <h1 class="page">Economics</h1>
+      <p class="sub">How firms set output, how whole economies expand and contract, how governments and central banks steer them, and how money moves across borders.</p>
+      <div class="toc">
+        <a href="#ch-cfa-ec-1">1 · Firms &amp; market structures</a>
+        <a href="#ch-cfa-ec-2">2 · Business cycles &amp; policy</a>
+        <a href="#ch-cfa-ec-3">3 · International trade</a>
+        <a href="#ch-cfa-ec-4">4 · Currency exchange rates</a>
+      </div>
+
+      <article class="chapter" id="ch-cfa-ec-1">
+        <div class="ch-head"><div class="ch-title"><div class="ch-num" style="background:var(--verbal)">1</div><h2>Firms &amp; market structures</h2></div><button class="review-btn" data-review="ch-cfa-ec-1">Mark reviewed</button></div>
+        <p>A profit-maximizing firm produces the quantity where <strong>marginal revenue equals marginal cost</strong>. Producing one more unit adds revenue (MR) and cost (MC); while MR &gt; MC keep going, stop when they meet.</p>
+        <div class="eqbox">
+          <div class="eq">profit max:&nbsp; MR = MC</div>
+          <div class="eq">break-even:&nbsp; <i>P</i> = ATC&nbsp;&nbsp;&nbsp;(TR = TC)</div>
+          <div class="eq">short-run shutdown if&nbsp; <i>P</i> &lt; AVC</div>
+        </div>
+        <h3>The four structures</h3>
+        <table class="tbl"><thead><tr><th>Structure</th><th>Firms</th><th>Pricing power</th><th>Long-run profit</th></tr></thead><tbody>
+          <tr><td>Perfect competition</td><td>Many</td><td>None (price taker, P = MR)</td><td>Zero economic</td></tr>
+          <tr><td>Monopolistic competition</td><td>Many, differentiated</td><td>Some</td><td>Zero economic</td></tr>
+          <tr><td>Oligopoly</td><td>Few, interdependent</td><td>Varies (game theory)</td><td>Can persist</td></tr>
+          <tr><td>Monopoly</td><td>One</td><td>High (price maker)</td><td>Can persist (barriers)</td></tr>
+        </tbody></table>
+        <details class="worked"><summary><span class="wx-tag">Worked example</span> Keep operating or shut down?</summary>
+          <div class="wx-body"><ol class="steps">
+            <li>A competitive firm faces price <i>P</i> = $8. Its AVC = $6 and ATC = $10.</li>
+            <li>Short run: <i>P</i> ($8) &gt; AVC ($6), so it covers variable costs plus a bit toward fixed — keep operating.</li>
+            <li>But <i>P</i> &lt; ATC, so it's losing money; in the long run, if nothing improves, it should <span class="ans">exit</span>.</li>
+          </ol></div>
+        </details>
+        <div class="mistake"><strong>⚠ Common mistakes</strong><ul>
+          <li>Using ATC for the short-run shutdown test — the short-run test is against AVC.</li>
+          <li>Thinking firms maximize revenue; they maximize profit, where MR = MC.</li>
+          <li>Assuming perfect competitors earn profits long run — entry competes them to zero economic profit.</li>
+        </ul></div>
+      </article>
+
+      <article class="chapter" id="ch-cfa-ec-2">
+        <div class="ch-head"><div class="ch-title"><div class="ch-num" style="background:var(--verbal)">2</div><h2>Business cycles, fiscal &amp; monetary policy</h2></div><button class="review-btn" data-review="ch-cfa-ec-2">Mark reviewed</button></div>
+        <p>Total output is measured by GDP. The expenditure approach:</p>
+        <div class="eqbox"><div class="eq">GDP = <i>C</i> + <i>I</i> + <i>G</i> + (<i>X</i> − <i>M</i>)</div></div>
+        <p>Economies move through <strong>business cycles</strong> (expansion → peak → contraction → trough). Unemployment comes in types (frictional, structural, cyclical); inflation is measured by price indexes (CPI) and can be demand-pull or cost-push.</p>
+        <h3>Two levers</h3>
+        <p><strong>Fiscal policy</strong> is the government's spending and taxes. Expansionary fiscal policy (more spending, lower taxes) boosts aggregate demand. <strong>Monetary policy</strong> is the central bank's control of money and interest rates.</p>
+        <div class="eqbox">
+          <div class="eq">simple spending multiplier = <span class="frac"><span>1</span><span>1 − MPC</span></span></div>
+          <div class="eq">quantity of money:&nbsp; <i>M</i> · <i>V</i> = <i>P</i> · <i>Y</i></div>
+          <div class="eq">nominal rate ≈ real rate + expected inflation</div>
+        </div>
+        <details class="worked"><summary><span class="wx-tag">Worked example</span> The spending multiplier</summary>
+          <div class="wx-body"><ol class="steps">
+            <li>Households spend 80 cents of each extra dollar, so MPC = 0.8.</li>
+            <li>Multiplier = 1 / (1 − 0.8) = 1 / 0.2.</li>
+            <li>= <span class="ans">5</span> — $1 of new government spending can raise output by up to $5 (in the simple model).</li>
+          </ol></div>
+        </details>
+        <div class="keyidea"><strong>Who does what</strong> Fiscal policy = legislature/treasury (spending &amp; taxes). Monetary policy = the central bank (rates &amp; money supply). They can reinforce or offset each other.</div>
+        <div class="mistake"><strong>⚠ Common mistakes</strong><ul>
+          <li>Mixing up fiscal (government budget) and monetary (central bank) policy.</li>
+          <li>Confusing nominal and real interest rates — strip out expected inflation for the real rate.</li>
+        </ul></div>
+      </article>
+
+      <article class="chapter" id="ch-cfa-ec-3">
+        <div class="ch-head"><div class="ch-title"><div class="ch-num" style="background:var(--verbal)">3</div><h2>International trade &amp; geopolitics</h2></div><button class="review-btn" data-review="ch-cfa-ec-3">Mark reviewed</button></div>
+        <p>Countries gain from trade by specializing according to <strong>comparative advantage</strong> — producing what they give up the least to make (lowest opportunity cost) — even if another country is better at everything (absolute advantage).</p>
+        <details class="worked"><summary><span class="wx-tag">Worked example</span> Comparative advantage</summary>
+          <div class="wx-body"><ol class="steps">
+            <li>Country A gives up 2 units of cloth to make 1 unit of wine. Country B gives up only 0.5 cloth per wine.</li>
+            <li>B's opportunity cost of wine (0.5 cloth) is lower than A's (2 cloth).</li>
+            <li>So B should specialize in <span class="ans">wine</span> and A in cloth, then trade — both end up better off.</li>
+          </ol></div>
+        </details>
+        <p><strong>Trade restrictions</strong> — tariffs (a tax on imports), quotas, and subsidies — generally raise the domestic price, protect local producers, and create a deadweight loss for the economy overall. The <strong>balance of payments</strong> splits into the current account (trade in goods/services) and the capital/financial account. Bodies like the IMF, World Bank, and WTO facilitate trade and stability.</p>
+        <div class="mistake"><strong>⚠ Common mistakes</strong><ul>
+          <li>Confusing absolute advantage (being better) with comparative advantage (lower opportunity cost) — trade is driven by the latter.</li>
+          <li>Assuming a tariff lowers prices for consumers; it raises the domestic price.</li>
+        </ul></div>
+      </article>
+
+      <article class="chapter" id="ch-cfa-ec-4">
+        <div class="ch-head"><div class="ch-title"><div class="ch-num" style="background:var(--verbal)">4</div><h2>Currency exchange rates</h2></div><button class="review-btn" data-review="ch-cfa-ec-4">Mark reviewed</button></div>
+        <p>An exchange rate is a price: <strong>price currency per unit of base currency</strong> (P/B). If USD/EUR = 1.10, the base is the euro and 1 EUR costs 1.10 USD. When that number rises, the base currency (EUR) has <strong>appreciated</strong>.</p>
+        <div class="eqbox">
+          <div class="eq">% change in base = <span class="frac"><span>new rate − old rate</span><span>old rate</span></span></div>
+          <div class="eq">forward premium = forward − spot</div>
+          <div class="eq">covered parity:&nbsp; <span class="frac"><span>F</span><span>S</span></span> = <span class="frac"><span>1 + <i>r</i><sub>price</sub></span><span>1 + <i>r</i><sub>base</sub></span></span></div>
+        </div>
+        <details class="worked"><summary><span class="wx-tag">Worked example</span> Did the euro strengthen?</summary>
+          <div class="wx-body"><ol class="steps">
+            <li>USD/EUR (price/base) goes from 1.10 to 1.15.</li>
+            <li>It now takes more dollars to buy one euro.</li>
+            <li>So the euro (the base) has <span class="ans">appreciated</span> by (1.15 − 1.10)/1.10 ≈ 4.5%; the dollar depreciated.</li>
+          </ol></div>
+        </details>
+        <details class="worked"><summary><span class="wx-tag">Worked example</span> A cross rate</summary>
+          <div class="wx-body"><ol class="steps">
+            <li>USD/EUR = 1.10 and USD/GBP = 1.25. Find EUR/GBP.</li>
+            <li>EUR/GBP = (USD/GBP) ÷ (USD/EUR) = 1.25 / 1.10.</li>
+            <li>≈ <span class="ans">1.136</span> euros per pound.</li>
+          </ol></div>
+        </details>
+        <div class="mistake"><strong>⚠ Common mistakes</strong><ul>
+          <li>Mixing up the base and price currency — always identify which is which before computing.</li>
+          <li>Getting the appreciation direction backwards: a rising P/B quote means the <em>base</em> strengthened.</li>
+          <li>Putting the wrong country's rate in the numerator of covered interest rate parity (price currency on top).</li>
+        </ul></div>
+      </article>
+
+      <div class="practice-head"><h2>Practice — Economics</h2><div class="line"></div></div>
+      <p class="practice-intro">Eleven questions across market structures, policy, trade, and FX, each with full explanations.</p>
+      <div class="practice" data-quiz="econ"></div>
+      <div class="footnote">Original practice questions for skill-building; not affiliated with CFA Institute.</div>
+    </section>
+
+    <!-- ===================== CFA FORMULA SHEET ===================== -->
+    <section data-prog="cfa" class="view" id="view-cfa-formulas">
+      <span class="eyebrow" style="background:var(--gold-soft);color:var(--gold)">Reference</span>
+      <h1 class="page">CFA formula sheet</h1>
+      <p class="sub">The Book 1 formulas worth committing to memory, typeset for quick review.</p>
+
+      <div class="sheet-sec">
+        <h2><span class="swatch" style="background:var(--quant)"></span>Quantitative Methods</h2>
+        <div class="sheet-grid">
+          <div class="sheet-card"><h4>Returns</h4><div class="eqbox">
+            <div class="eq">HPR = <span class="frac"><span><i>P</i><sub>1</sub>−<i>P</i><sub>0</sub>+inc</span><span><i>P</i><sub>0</sub></span></span></div>
+            <div class="eq">geo = [Π(1+<i>R</i><sub>i</sub>)]<sup>1/n</sup> − 1</div>
+          </div></div>
+          <div class="sheet-card"><h4>Time value of money</h4><div class="eqbox">
+            <div class="eq"><i>FV</i> = <i>PV</i>(1+<i>r</i>)<sup>n</sup></div>
+            <div class="eq">perpetuity = <span class="frac"><span><i>A</i></span><span><i>r</i></span></span>, grow = <span class="frac"><span><i>A</i><sub>1</sub></span><span><i>r</i>−<i>g</i></span></span></div>
+          </div></div>
+          <div class="sheet-card"><h4>Dispersion &amp; risk</h4><div class="eqbox">
+            <div class="eq"><i>s</i><sup>2</sup> = <span class="frac"><span>Σ(<i>x</i>−<span style="border-top:1.3px solid">x</span>)<sup>2</sup></span><span><i>n</i>−1</span></span></div>
+            <div class="eq">CV = <span class="frac"><span>SD</span><span>mean</span></span>&nbsp; Sharpe = <span class="frac"><span><i>R</i><sub>p</sub>−<i>R</i><sub>f</sub></span><span><i>σ</i><sub>p</sub></span></span></div>
+          </div></div>
+          <div class="sheet-card"><h4>Probability</h4><div class="eqbox">
+            <div class="eq">E(<i>X</i>) = Σ <i>p</i><sub>i</sub><i>x</i><sub>i</sub></div>
+            <div class="eq">Bayes = <span class="frac"><span><i>P</i>(<i>B</i>|<i>A</i>)<i>P</i>(<i>A</i>)</span><span><i>P</i>(<i>B</i>)</span></span></div>
+          </div></div>
+          <div class="sheet-card"><h4>Portfolio (2-asset)</h4><div class="eqbox">
+            <div class="eq"><i>σ</i><sub>p</sub><sup>2</sup> = <i>w</i><sub>1</sub><sup>2</sup><i>σ</i><sub>1</sub><sup>2</sup> + <i>w</i><sub>2</sub><sup>2</sup><i>σ</i><sub>2</sub><sup>2</sup> + 2<i>w</i><sub>1</sub><i>w</i><sub>2</sub><i>ρσ</i><sub>1</sub><i>σ</i><sub>2</sub></div>
+          </div></div>
+          <div class="sheet-card"><h4>Sampling &amp; testing</h4><div class="eqbox">
+            <div class="eq"><i>z</i> = <span class="frac"><span><i>x</i>−<i>μ</i></span><span><i>σ</i></span></span>&nbsp; SE = <span class="frac"><span><i>s</i></span><span>√<span class="sqrt"><i>n</i></span></span></span></div>
+            <div class="eq"><i>R</i><sup>2</sup> = <span class="frac"><span>SSR</span><span>SST</span></span></div>
+          </div></div>
+        </div>
+      </div>
+
+      <div class="sheet-sec">
+        <h2><span class="swatch" style="background:var(--verbal)"></span>Economics</h2>
+        <div class="sheet-grid">
+          <div class="sheet-card"><h4>The firm</h4><div class="eqbox">
+            <div class="eq">profit max: MR = MC</div>
+            <div class="eq">shutdown (SR): <i>P</i> &lt; AVC</div>
+          </div></div>
+          <div class="sheet-card"><h4>Macro</h4><div class="eqbox">
+            <div class="eq">GDP = <i>C</i>+<i>I</i>+<i>G</i>+(<i>X</i>−<i>M</i>)</div>
+            <div class="eq">multiplier = <span class="frac"><span>1</span><span>1−MPC</span></span></div>
+          </div></div>
+          <div class="sheet-card"><h4>Money &amp; rates</h4><div class="eqbox">
+            <div class="eq"><i>M</i>·<i>V</i> = <i>P</i>·<i>Y</i></div>
+            <div class="eq">nominal ≈ real + inflation</div>
+          </div></div>
+          <div class="sheet-card"><h4>FX</h4><div class="eqbox">
+            <div class="eq"><span class="frac"><span>F</span><span>S</span></span> = <span class="frac"><span>1+<i>r</i><sub>price</sub></span><span>1+<i>r</i><sub>base</sub></span></span></div>
+            <div class="eq"><span class="eqnote">P/B up ⇒ base appreciates</span></div>
+          </div></div>
+        </div>
+      </div>
+      <div class="footnote">Concepts taught in original wording; not affiliated with or endorsed by CFA Institute or Kaplan Schweser.</div>
+    </section>
+    <!-- ===================== FLASHCARDS (shared) ===================== -->
+    <section class="view" id="view-flashcards">
+      <span class="eyebrow" style="background:var(--gold-soft);color:var(--gold)">Daily review</span>
+      <h1 class="page">Flashcards</h1>
+      <p class="sub" id="flash-sub"></p>
+      <div id="flash-host"></div>
+    </section>
+    <!-- ===================== ERROR JOURNAL (shared) ===================== -->
+    <section class="view" id="view-journal">
+      <span class="eyebrow" style="background:var(--bad-bg);color:var(--bad)">Learn from misses</span>
+      <h1 class="page">Error journal</h1>
+      <p class="sub" id="journal-sub"></p>
+      <div id="journal-host"></div>
+    </section>
+    </div><!-- /.wrap -->
+  </main>
+</div>
+
+<script>
+const DS_CHOICES = [
+  "Statement (1) ALONE is sufficient, but (2) alone is not.",
+  "Statement (2) ALONE is sufficient, but (1) alone is not.",
+  "BOTH statements TOGETHER are sufficient, but NEITHER alone is.",
+  "EACH statement ALONE is sufficient.",
+  "Statements (1) and (2) TOGETHER are NOT sufficient."
+];
+const OCTOPUS = '<p>For decades, octopuses were dismissed as simple creatures driven by instinct. Recent research has overturned that view. In laboratory settings, octopuses solve puzzle boxes to reach food, navigate mazes, and appear to recognize and respond differently to individual human handlers — behaviors that suggest learning and memory rather than reflex.</p><p>What makes these findings striking is the octopus’s biology. Roughly two-thirds of its neurons lie not in a central brain but distributed through its arms, each of which can act with a degree of independence. This decentralized arrangement is utterly unlike the centralized nervous systems of mammals, yet it appears to support comparably flexible behavior.</p><p>Still, caution is warranted. Critics note that laboratory tasks may reward trial-and-error rather than genuine reasoning, and that an octopus’s short lifespan limits the cultural transmission of learned behavior seen in longer-lived social animals. The debate is far from settled.</p>';
+
+const QUIZ = {
+  quant:[
+    {id:"q1",topic:"Percents",stem:"A retailer marks up a coat 25% above its $80 cost, then runs a sale at 20% off the marked-up price. What is the sale price?",choices:["$72","$76","$80","$84","$100"],answer:2,exp:"Marked-up price = 80 × 1.25 = $100. Sale price = 100 × 0.80 = $80.",why:"It looks like +25% then −20% should land below $80, but the 20% comes off the larger $100 base. Successive percents multiply; they never simply add or cancel."},
+    {id:"q2",topic:"Percents",stem:"0.2% of 5,000 is:",choices:["1","10","100","1,000","0.1"],answer:1,exp:"0.2% = 0.002. 0.002 × 5,000 = 10.",why:"The slip is reading 0.2% as 0.2 (gives 1,000) or as 2% (gives 100). 0.2% = 2/1000."},
+    {id:"q3",topic:"Percents",stem:"If x is 30% of y, then y is what percent of x?",choices:["30%","70%","130%","300%","333⅓%"],answer:4,exp:"x = 0.3y, so y = x/0.3 = (10/3)x ≈ 333⅓% of x.",why:"Reversing a percent isn't symmetric. Pick numbers — y=100 → x=30, and 100 is 333⅓% of 30."},
+    {id:"q4",topic:"Ratios",stem:"If A : B = 3 : 5 and B : C = 2 : 7, then A : B : C =",choices:["3 : 5 : 7","6 : 10 : 35","3 : 10 : 7","6 : 5 : 35","3 : 2 : 7"],answer:1,exp:"Make B common. LCM of 5 and 2 is 10. A:B = 6:10, B:C = 10:35, so 6:10:35.",why:"You can't lay the ratios side by side — the B term differs (5 vs 2). Rescale so B matches first."},
+    {id:"q5",topic:"Number properties",stem:"If n is an integer, which expression must be even?",choices:["n² + 1","2n + 1","n² + n","n² − 1","3n"],answer:2,exp:"n² + n = n(n+1), the product of two consecutive integers, one of which is always even.",why:"2n+1 is always odd; the others depend on n's parity. Only n(n+1) is forced even."},
+    {id:"q6",topic:"Number properties",stem:"What is the remainder when 7⁴ is divided by 5?",choices:["0","1","2","3","4"],answer:1,exp:"7 ≡ 2 (mod 5), so 7⁴ ≡ 2⁴ = 16 ≡ 1.",why:"Reduce the base to its remainder before taking powers — computing 2401 is unnecessary."},
+    {id:"q7",topic:"Algebra",stem:"If 3(x − 2) = 2x + 5, then x =",choices:["1","3","7","11","13"],answer:3,exp:"3x − 6 = 2x + 5 → x = 11.",why:"The error is not distributing the 3 to both terms (3x−2 instead of 3x−6)."},
+    {id:"q8",topic:"Exponents",stem:"If 2ˣ = 32, then x =",choices:["3","4","5","6","16"],answer:2,exp:"32 = 2⁵, so x = 5.",why:"Rewrite both sides with the same base. 16 is the trap (treating 32 = 2×16)."},
+    {id:"q9",topic:"Algebra",stem:"The roots of x² − 5x + 6 = 0 are:",choices:["−2 and −3","2 and 3","1 and 6","−1 and 6","5 and 6"],answer:1,exp:"(x − 2)(x − 3) = 0, so x = 2 or 3.",why:"The factors are (x−2),(x−3) but the roots flip sign to +2,+3."},
+    {id:"q10",topic:"Systems",stem:"If x + y = 10 and x − y = 4, then x =",choices:["3","5","6","7","14"],answer:3,exp:"Add the equations: 2x = 14 → x = 7.",why:"Adding eliminates y. Picking 3 means you solved for y."},
+    {id:"q11",topic:"Inequalities",stem:"If −3x + 2 > 11, then:",choices:["x > 3","x < 3","x > −3","x < −3","x > −9"],answer:3,exp:"−3x > 9 → divide by −3 and flip → x < −3.",why:"Dividing by a negative reverses the inequality."},
+    {id:"q12",topic:"Rate",stem:"A train travels 180 miles in 3 hours. At that average speed, how far does it travel in 5 hours?",choices:["240 mi","270 mi","300 mi","320 mi","360 mi"],answer:2,exp:"Rate = 180/3 = 60 mph. 60 × 5 = 300 miles.",why:"Find the rate first, then distance = rate × time."},
+    {id:"q13",topic:"Work",stem:"Pump A fills a tank in 4 hours and pump B in 6 hours. Working together, how long do they take?",choices:["2 hours","2.4 hours","2.5 hours","5 hours","10 hours"],answer:1,exp:"Combined rate = 1/4 + 1/6 = 5/12 per hour. Time = 12/5 = 2.4 hours.",why:"Rates add, not times. Together must beat the faster pump."},
+    {id:"q14",topic:"Mixtures",stem:"How many liters of pure water must be added to 10 liters of a 40% acid solution to dilute it to 25% acid?",choices:["4","5","6","8","15"],answer:2,exp:"Acid stays at 40% of 10 = 4 L. Want 4 = 25% of total → total = 16 L → add 6 L.",why:"Track the acid (constant), not the percentages."},
+    {id:"q15",topic:"Averages",stem:"The average of 5 numbers is 20. If the number 40 is removed, what is the average of the remaining 4 numbers?",choices:["10","15","16","18","20"],answer:1,exp:"Sum of 5 = 100. Remove 40 → 60. New average = 60/4 = 15.",why:"Work through the sum — removing an above-average value pulls it down."},
+    {id:"q16",topic:"Statistics",stem:"What is the median of the set {3, 7, 2, 9, 5}?",choices:["3","5","5.2","7","9"],answer:1,exp:"Sorted: 2, 3, 5, 7, 9. Middle = 5.",why:"Sort first. 5.2 is the mean."},
+    {id:"q17",topic:"Statistics",stem:"Which set has the greater standard deviation?  Set X = {5, 5, 5, 5}   Set Y = {2, 4, 6, 8}",choices:["Set X","Set Y","They are equal","Cannot be determined","Both are zero"],answer:1,exp:"Set X has no spread (SD = 0). Set Y is spread out.",why:"SD measures dispersion, not size. Identical values give 0."},
+    {id:"q18",topic:"Probability",stem:"A bag holds 3 red and 2 blue marbles. One is drawn at random. P(red) = ?",choices:["1/5","2/5","1/2","3/5","2/3"],answer:3,exp:"P(red) = 3/(3+2) = 3/5.",why:"The denominator is total marbles (5), not colors (2)."},
+    {id:"q19",topic:"Probability",stem:"A fair coin is flipped twice. What is the probability of getting heads both times?",choices:["1/8","1/4","1/3","1/2","3/4"],answer:1,exp:"Independent events multiply: 1/2 × 1/2 = 1/4.",why:"Multiply independent probabilities; adding gives the wrong 1."},
+    {id:"q20",topic:"Probability",stem:"A fair six-sided die is rolled once. What is the probability the result is greater than 4?",choices:["1/6","1/4","1/3","1/2","2/3"],answer:2,exp:"Greater than 4 = {5,6} = 2 of 6 = 1/3.",why:"'Greater than 4' excludes 4. Including it gives 1/2."}
+  ],
+  verbal:[
+    {id:"v1",topic:"CR — Weaken",stem:"A study found that adults who drink coffee daily live, on average, longer than adults who never drink coffee. Researchers concluded that drinking coffee causes people to live longer. Which of the following, if true, most weakens the conclusion?",choices:["Some people in the study drank tea in addition to coffee.","The daily coffee drinkers in the study also exercised more and smoked less than the non-drinkers.","Coffee contains antioxidants that have been studied in laboratory settings.","The study followed participants for more than twenty years.","A few of the non-coffee-drinkers in the study lived past age 90."],answer:1,exp:"The argument leaps from correlation to causation. (B) supplies a confounding factor.",why:"(A),(E) are minor; (C),(D) lend mild support. Only (B) offers an alternative explanation."},
+    {id:"v2",topic:"CR — Assumption",stem:"Company X plans to increase its profits by relocating its manufacturing overseas, where labor costs are 40% lower than at its current plant. The argument above assumes that:",choices:["The company's competitors have already moved overseas.","Labor is the company's single largest expense.","The savings on labor will not be offset by increases in other costs such as shipping, tariffs, or quality control.","Overseas workers are as productive on every task.","The products will sell at a higher price after the move."],answer:2,exp:"Savings must reach the bottom line. (C) is the necessary bridge.",why:"Negate (C) and the argument collapses. (B),(D),(E) are stronger than needed; (A) is irrelevant."},
+    {id:"v3",topic:"CR — Strengthen",stem:"To curb childhood obesity, a school district banned sugary drinks on campus. An official predicts obesity rates will therefore decline. Which of the following, if true, most strengthens the prediction?",choices:["Sugary drinks are popular among children in many districts.","Before the ban, school sugary drinks were the largest single source of added sugar in students' diets, and students are unlikely to replace them elsewhere.","The district will add sports facilities next year.","Some parents objected on the grounds of student choice.","Sugary drinks have more sugar than most school snacks."],answer:1,exp:"(B) confirms school drinks dominated intake and won't be replaced.",why:"(C) is a separate cause; (E) doesn't establish intake or substitution; (A),(D) are irrelevant."},
+    {id:"v4",topic:"CR — Inference",stem:"All senior analysts at a firm are certified, and no certified employee may work fewer than 30 hours per week. Maria is a senior analyst. Which must be true?",choices:["Maria works exactly 30 hours per week.","Maria works at least 30 hours per week.","Every employee working 30+ hours is a senior analyst.","Maria is the most experienced analyst.","Only certified employees can become senior analysts in future."],answer:1,exp:"Senior → certified → at least 30 hours.",why:"(A) 'exactly' is too specific; (C) reverses the logic; (D),(E) add unsupported info."},
+    {id:"v5",topic:"CR — Flaw",stem:"A columnist wrote: 'The new mayor promised to reduce crime, and in her first year reported crime fell 8%. Clearly her policies are working.' The reasoning is most vulnerable to the criticism that it:",choices:["relies on statistics that cannot be verified.","assumes the decline was caused by the mayor's policies rather than other factors.","fails to define what counts as a crime.","attacks the mayor's character instead of her policies.","generalizes from one city to all cities."],answer:1,exp:"A post hoc leap: 'after' treated as 'because of.'",why:"(D) is an ad hominem that didn't occur; (A),(C),(E) name absent flaws."},
+    {id:"v6",topic:"RC — Main idea",passage:OCTOPUS,stem:"The primary purpose of the passage is to:",choices:["argue that octopuses are more intelligent than mammals.","describe evidence of octopus cognition and the debate it has prompted about the nature of intelligence.","explain how the octopus nervous system evolved.","prove that lab experiments are unreliable for studying animals.","recommend new methods for studying marine life."],answer:1,exp:"A balanced overview of evidence, biology, and counter-arguments.",why:"(A) too one-sided; (C) a fragment; (D) overstates critics; (E) not discussed."},
+    {id:"v7",topic:"RC — Detail",passage:OCTOPUS,stem:"According to the passage, roughly what fraction of an octopus's neurons are located outside its central brain?",choices:["One-tenth","One-quarter","One-half","Two-thirds","Nearly all"],answer:3,exp:"The passage says 'roughly two-thirds … distributed through its arms.'",why:"A locate-the-line question — return to the text."},
+    {id:"v8",topic:"RC — Inference",passage:OCTOPUS,stem:"The critics in the final paragraph would most likely agree that:",choices:["octopuses are incapable of any learning.","some lab behavior might be explained without crediting genuine reasoning.","octopuses should be studied only in the wild.","intelligence cannot evolve outside a centralized brain.","octopuses outlive most mammals."],answer:1,exp:"Critics note tasks 'may reward trial-and-error rather than genuine reasoning.'",why:"(A) too absolute; (C),(D) not claimed; (E) contradicts the passage."}
+  ],
+  di:[
+    {id:"d1",topic:"Data Sufficiency",ds:true,stem:"Is x &gt; 0?<br>(1) x² &gt; 0<br>(2) x³ &gt; 0",answer:1,exp:"(1) means x≠0 (could be ±3) → not sufficient. (2) forces x positive → sufficient. Answer (B).",why:"The trap is treating x²>0 as 'x positive.' Squaring hides the sign; cubing preserves it."},
+    {id:"d2",topic:"Data Sufficiency",ds:true,stem:"What is the value of the integer x?<br>(1) x + y = 10<br>(2) x − y = 4",answer:2,exp:"Each alone: two unknowns. Together: add → 2x = 14 → x = 7. Answer (C).",why:"Neither pins x alone. Don't jump to (C) without checking each."},
+    {id:"d3",topic:"Data Sufficiency",ds:true,stem:"Is the integer n even?<br>(1) n² is even.<br>(2) 3n is even.",answer:3,exp:"(1) n² even → n even. (2) 3n even → n even. Each alone works: (D).",why:"Both independently force n even."},
+    {id:"d4",topic:"Data Sufficiency",ds:true,stem:"What was a bookstore's total revenue from paperback sales today?<br>(1) It sold 30 paperbacks, each at $12.<br>(2) Paperbacks were 60% of the 200 books sold.",answer:0,exp:"(1) 30 × $12 = $360 → sufficient. (2) gives count (120) but no price → not sufficient. Answer (A).",why:"Revenue needs price × quantity; (2) never gives price."},
+    {id:"d5",topic:"Table Analysis",table:'<table class="tbl"><thead><tr><th>Region</th><th>Q1 ($K)</th><th>Q2 ($K)</th><th>Reps</th></tr></thead><tbody><tr><td>North</td><td>420</td><td>500</td><td>5</td></tr><tr><td>South</td><td>610</td><td>590</td><td>6</td></tr><tr><td>East</td><td>300</td><td>360</td><td>3</td></tr><tr><td>West</td><td>540</td><td>700</td><td>5</td></tr></tbody></table>',stem:"Which region had the largest <em>percentage</em> increase from Q1 to Q2?",choices:["North","South","East","West","They were equal"],answer:3,exp:"North ≈19%; South negative; East 20%; West ≈30%. West largest.",why:"Check the rate against the base — East's +60 (20%) beats North's +80 (19%)."},
+    {id:"d6",topic:"Table Analysis",table:'<table class="tbl"><thead><tr><th>Region</th><th>Q2 ($K)</th><th>Reps</th></tr></thead><tbody><tr><td>North</td><td>500</td><td>5</td></tr><tr><td>South</td><td>590</td><td>6</td></tr><tr><td>East</td><td>360</td><td>3</td></tr><tr><td>West</td><td>700</td><td>5</td></tr></tbody></table>',stem:"Which region had the highest Q2 sales <em>per rep</em>?",choices:["North","South","East","West","North and East tied"],answer:3,exp:"Per rep: North 100, South ≈98, East 120, West 140.",why:"Normalize by reps — East (120) beats North and South despite a lower total."},
+    {id:"d7",topic:"Graphics Interpretation",stem:"A scatterplot of ice-cream sales (y) vs temperature (x) rises from lower-left to upper-right in a tight band. The relationship is a strong ____ correlation.",choices:["positive","negative","zero","inverse","undefined"],answer:0,exp:"Both rise together — strong positive correlation.",why:"Negative/inverse slopes down. 'Tight band' = strength; upward = positive."},
+    {id:"d8",topic:"Graphics Interpretation",stem:"The same plot shows a strong positive correlation. Which conclusion is best supported?",choices:["Higher temperatures cause more ice-cream buying.","Buying ice cream raises the temperature.","The two move together, but the data alone do not establish that one causes the other.","There is no relationship.","Sales are unrelated to season."],answer:2,exp:"Correlation is not causation.",why:"(A) plausible but unsupported by the chart; (B) absurd; (D),(E) deny the visible correlation."},
+    {id:"d9",topic:"Multi-Source Reasoning",multisource:'<p style="margin:0 0 8px"><strong>Source 1:</strong> Orders over $50 ship free; $50 or less pay a $6 fee. A 10% code applies to the subtotal before shipping.</p><p style="margin:0"><strong>Source 2:</strong> Cart subtotal is $52.00 and the 10% code is applied.</p>',stem:"What is the customer's total charge, including shipping?",choices:["$46.80","$52.00","$52.80","$46.20","$58.00"],answer:2,exp:"10% off $52 = $46.80, now ≤ $50, so add $6 → $52.80.",why:"Both sources matter: the discount drops the order below the free-shipping line. Stopping at $46.80 is the trap."}
+  ],
+  qm:[
+    {id:"qm1",topic:"Returns",stem:"An investor buys a stock at $50, receives a $2 dividend, and sells at $55. The holding period return is:",choices:["6%","10%","14%","7%","12%"],answer:2,exp:"HPR = (55 − 50 + 2)/50 = 7/50 = 14%.",why:"Include the dividend in the numerator and divide by the beginning price, not the ending price."},
+    {id:"qm2",topic:"Returns",stem:"An asset returns +50% one year and −50% the next. Its compound (geometric) annual return is approximately:",choices:["0%","−13.4%","−25%","+13.4%","−50%"],answer:1,exp:"√(1.50 × 0.50) − 1 = √0.75 − 1 ≈ −13.4%. $100 → $150 → $75.",why:"The arithmetic mean (0%) overstates reality; multi-period growth uses the geometric mean."},
+    {id:"qm3",topic:"Returns",stem:"To evaluate a portfolio manager's performance independent of client cash-flow timing, the preferred measure is the:",choices:["money-weighted return","time-weighted return","arithmetic mean return","holding period return","harmonic mean return"],answer:1,exp:"Time-weighted return removes the effect of deposits/withdrawals the manager doesn't control.",why:"Money-weighted (IRR) is distorted by the timing of external cash flows."},
+    {id:"qm4",topic:"Time value",stem:"$1,000 invested at 6% compounded annually grows to what after 3 years?",choices:["$1,159.27","$1,180.00","$1,191.02","$1,218.00","$1,000.00"],answer:2,exp:"FV = 1,000 × 1.06³ = 1,000 × 1.191016 = $1,191.02.",why:"Compound (raise to the power 3); simple interest would give only $1,180."},
+    {id:"qm5",topic:"Time value",stem:"A preferred share pays $5 per year in perpetuity. If investors require 8%, its value is:",choices:["$40.00","$50.00","$62.50","$80.00","$100.00"],answer:2,exp:"Perpetuity value = A/r = 5/0.08 = $62.50.",why:"A level perpetual cash flow is simply payment ÷ required return."},
+    {id:"qm6",topic:"Statistics",stem:"When estimating variance from a sample, the sum of squared deviations is divided by:",choices:["n","n − 1","n + 1","√n","the population size N"],answer:1,exp:"Sample variance uses n − 1 (degrees of freedom) to correct for using the sample mean.",why:"Dividing by n understates the variance for a sample."},
+    {id:"qm7",topic:"Statistics",stem:"Fund A: mean return 8%, SD 12%. Fund B: mean 6%, SD 6%. Which has lower risk per unit of return (lower coefficient of variation)?",choices:["Fund A","Fund B","They are equal","Cannot be determined","Both equal 1.0"],answer:1,exp:"CV_A = 12/8 = 1.5; CV_B = 6/6 = 1.0. B is lower.",why:"Higher absolute return doesn't mean better risk-adjusted; CV = SD/mean."},
+    {id:"qm8",topic:"Probability",stem:"Combining two risky assets whose correlation is less than +1 produces a portfolio standard deviation that is:",choices:["equal to the weighted average of the two SDs","greater than the weighted average","less than the weighted average","exactly zero","undefined"],answer:2,exp:"With ρ < 1 the covariance term shrinks portfolio variance below the weighted average — diversification.",why:"Risk only averages when ρ = +1; any lower correlation reduces it."},
+    {id:"qm9",topic:"Probability",stem:"An investment returns +20% (prob 0.3), +5% (prob 0.5), or −10% (prob 0.2). Its expected return is:",choices:["5.0%","6.5%","7.0%","8.0%","15.0%"],answer:1,exp:"0.3(20) + 0.5(5) + 0.2(−10) = 6 + 2.5 − 2 = 6.5%.",why:"Weight each outcome by its probability; don't take a simple average of the three."},
+    {id:"qm10",topic:"Distributions",stem:"For a normal distribution, approximately what percent of observations fall within ±2 standard deviations of the mean?",choices:["68%","90%","95%","99.7%","50%"],answer:2,exp:"The empirical rule: ~68% within ±1, ~95% within ±2, ~99.7% within ±3.",why:"68% is ±1 SD; 99.7% is ±3 SD."},
+    {id:"qm11",topic:"Sampling",stem:"As the sample size increases, the standard error of the sample mean:",choices:["increases","decreases","stays the same","becomes negative","equals the standard deviation"],answer:1,exp:"Standard error = σ/√n, which falls as n rises.",why:"Bigger samples estimate the mean more precisely; SE is not the same as SD."},
+    {id:"qm12",topic:"Hypothesis testing",stem:"Rejecting a null hypothesis that is actually true is:",choices:["a Type I error","a Type II error","the power of the test","the p-value","a correct decision"],answer:0,exp:"Type I error = rejecting a true H₀; its probability is the significance level α.",why:"Type II is failing to reject a false H₀; power is 1 − β."},
+    {id:"qm13",topic:"Regression",stem:"In a simple linear regression, an R² of 0.64 means:",choices:["the slope equals 0.64","64% of the variation in Y is explained by X","the correlation is 0.64","there is a 64% chance the model is correct","X causes 64% of Y"],answer:1,exp:"R² is the fraction of Y's variation explained by the model.",why:"The correlation would be √0.64 = 0.8, and regression never proves causation."}
+  ],
+  econ:[
+    {id:"ec1",topic:"The firm",stem:"A firm maximizes profit by producing the quantity where:",choices:["price is at its maximum","marginal revenue equals marginal cost","average total cost is minimized","total revenue is maximized","demand equals supply"],answer:1,exp:"Profit is maximized where MR = MC.",why:"Maximizing revenue or minimizing ATC are different objectives."},
+    {id:"ec2",topic:"The firm",stem:"In the short run, a competitive firm should keep operating as long as price is at least:",choices:["average total cost","average variable cost","marginal cost","average fixed cost","total fixed cost"],answer:1,exp:"If P ≥ AVC the firm covers variable costs and contributes to fixed costs, so it operates short run.",why:"The ATC test is the long-run exit decision, not the short-run shutdown."},
+    {id:"ec3",topic:"Market structures",stem:"In perfect competition at long-run equilibrium, firms earn:",choices:["large economic profits","zero economic profit","persistent losses","monopoly-level profits","unpredictable profits"],answer:1,exp:"Free entry competes economic profit to zero in the long run.",why:"Positive profits attract entrants until they're eliminated."},
+    {id:"ec4",topic:"Macro",stem:"Which is the correct expenditure formula for GDP?",choices:["C + I + G + (X − M)","C + I + G + (M − X)","C − I + G + X","C + I − G + (X − M)","C + G + (M − X)"],answer:0,exp:"GDP = Consumption + Investment + Government + (Exports − Imports).",why:"Net exports are exports minus imports, not the reverse."},
+    {id:"ec5",topic:"Fiscal policy",stem:"An expansionary fiscal policy would most likely involve:",choices:["raising taxes","cutting government spending","increasing government spending","raising the central bank's policy rate","reducing the money supply"],answer:2,exp:"More government spending (or lower taxes) raises aggregate demand.",why:"Policy rate and money supply are monetary, not fiscal, tools."},
+    {id:"ec6",topic:"Monetary policy",stem:"Monetary policy is conducted by:",choices:["the central bank","the legislature","the treasury through taxation","the WTO","commercial banks"],answer:0,exp:"The central bank controls the money supply and policy interest rate.",why:"Taxes and government spending are fiscal policy, run by the government."},
+    {id:"ec7",topic:"Macro",stem:"If the marginal propensity to consume is 0.8, the simple spending multiplier is:",choices:["1.25","4","5","8","0.8"],answer:2,exp:"Multiplier = 1/(1 − MPC) = 1/0.2 = 5.",why:"It's 1/(1 − MPC), not 1/MPC."},
+    {id:"ec8",topic:"Trade",stem:"A country should specialize in producing a good in which it has:",choices:["an absolute advantage in everything","the lowest opportunity cost (comparative advantage)","the highest wages","an existing trade surplus","the largest population"],answer:1,exp:"Gains from trade come from comparative advantage — lowest opportunity cost.",why:"Even a country worse at everything (no absolute advantage) still has a comparative advantage."},
+    {id:"ec9",topic:"FX",stem:"If the USD/EUR rate (price/base) rises from 1.10 to 1.15, the euro has:",choices:["depreciated against the dollar","appreciated against the dollar","stayed unchanged","become the price currency","lost half its value"],answer:1,exp:"More dollars per euro means the euro (the base) strengthened.",why:"A rising price/base quote means the base currency appreciated; the dollar depreciated."},
+    {id:"ec10",topic:"Trade",stem:"A tariff on imported goods will most likely:",choices:["lower the domestic price of the good","raise the domestic price and reduce imports","increase the volume of imports","have no effect on price","mainly benefit foreign producers"],answer:1,exp:"A tariff raises the domestic price, protects local producers, and reduces imports.",why:"Consumers pay more; it doesn't lower prices or help foreign producers."},
+    {id:"ec11",topic:"Money & rates",stem:"The approximate nominal interest rate equals:",choices:["the real rate − inflation","the real rate + expected inflation","inflation − the real rate","the real rate × inflation","the rate of GDP growth"],answer:1,exp:"Fisher: nominal ≈ real rate + expected inflation.",why:"To get the real rate you subtract expected inflation from the nominal rate."}
+  ]
+};
+
+const PROGRAMS = {
+  gmat:{ label:"GMAT Focus", dashId:"dash-body", defaultView:"dashboard",
+    sections:[
+      {key:"quant",name:"Quant",color:"--quant",prefix:"ch-q"},
+      {key:"verbal",name:"Verbal",color:"--verbal",prefix:"ch-v"},
+      {key:"di",name:"Data Insights",color:"--di",prefix:"ch-d"}
+    ]},
+  cfa:{ label:"CFA Level I", dashId:"dash-body-cfa", defaultView:"cfa-dashboard",
+    sections:[
+      {key:"qm",name:"Quant Methods",color:"--quant",prefix:"ch-cfa-qm-"},
+      {key:"econ",name:"Economics",color:"--verbal",prefix:"ch-cfa-ec-"}
+    ]}
+};
+
+const PKEY = "studyDesk_v1";
+function loadP(){ try{ return JSON.parse(localStorage.getItem(PKEY)) || {}; }catch(e){ return {}; } }
+function saveP(){ try{ localStorage.setItem(PKEY, JSON.stringify(progress)); }catch(e){} }
+let progress = loadP();
+progress.answers = progress.answers || {};
+progress.reviewed = progress.reviewed || {};
+progress.streak = progress.streak || {count:0,last:null};
+progress.flagged = progress.flagged || {};
+progress.notes = progress.notes || {};
+progress.cards = progress.cards || {};
+progress.last = progress.last || null;
+function todayStr(){ const d=new Date(); return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate(); }
+function dayNum(){ return Math.floor(Date.now()/86400000); }
+(function(){ const t=todayStr(), s=progress.streak; if(s.last===t) return; const y=new Date(); y.setDate(y.getDate()-1); const yStr=y.getFullYear()+"-"+(y.getMonth()+1)+"-"+y.getDate(); s.count=(s.last===yStr)?s.count+1:1; s.last=t; saveP(); })();
+
+/* ---------- difficulty ---------- */
+const DIFFSETS={
+  easy:["q1","q2","q7","q8","q10","q12","q16","q18","q19","v4","v7","d2","d3","qm1","qm4","qm5","ec1","ec4","ec6"],
+  hard:["q3","q5","q6","q9","q11","q14","q21","q22","v1","v2","v5","v9","d1","d4","d8","d10","qm2","qm8","qm12","qm13","qm14","ec8","ec9","ec13"]
+};
+function diffOf(q){ if(q.diff) return q.diff; if(DIFFSETS.easy.indexOf(q.id)>=0) return "easy"; if(DIFFSETS.hard.indexOf(q.id)>=0) return "hard"; return "med"; }
+
+/* ---------- extra (harder) questions ---------- */
+QUIZ.quant.push(
+  {id:"q21",topic:"Percents",diff:"hard",stem:"A price rises 20%. By what percent must it then fall to return to the original price?",choices:["16⅔%","20%","25%","18%","80%"],answer:0,exp:"New price = 1.2P. To return, the fall = 0.2P / 1.2P = 1/6 ≈ 16⅔%.",why:"The decrease is taken from the higher price, so it's smaller than the 20% rise."},
+  {id:"q22",topic:"Number properties",diff:"hard",stem:"How many distinct positive factors does 36 have?",choices:["6","8","9","12","36"],answer:2,exp:"36 = 2²·3². Number of factors = (2+1)(2+1) = 9.",why:"Add one to each prime exponent and multiply; don't just count obvious pairs."}
+);
+QUIZ.verbal.push(
+  {id:"v9",topic:"CR — Weaken",diff:"hard",stem:"After City Z launched a bike-share program, bicycle commuting rose 30% in one year. Officials concluded the program caused the rise. Which most weakens this?",choices:["The bike-share bikes were painted bright colors.","A large network of protected bike lanes, unrelated to the program, opened across the city that same year.","Cycling is healthier than driving.","The program was funded by a federal grant.","Neighboring cities also operate bike-share programs."],answer:1,exp:"(B) gives an alternative cause for the rise — new bike lanes — undercutting the claim that the program caused it.",why:"The others are irrelevant to whether the program specifically drove the increase."},
+  {id:"v10",topic:"CR — Assumption",diff:"med",stem:"A retailer believes it will boost online sales by redesigning its site to load faster. This argument assumes that:",choices:["the company's products are high quality","slow loading is currently causing some potential buyers to leave without purchasing","competitors all have slow websites","the redesign will be inexpensive","most customers shop on mobile phones"],answer:1,exp:"For a faster site to lift sales, slow loading must currently be costing sales. Negate it and the plan does nothing.",why:"The others may be true but aren't required for the conclusion to hold."}
+);
+QUIZ.di.push(
+  {id:"d10",topic:"Data Sufficiency",ds:true,diff:"med",stem:"By what percent did a company's revenue change from Year 1 to Year 2?<br>(1) Year 1 revenue was $4 million.<br>(2) Year 2 revenue was $5 million.",answer:2,exp:"Neither alone gives both years. Together: (5−4)/4 = 25%. Answer (C).",why:"A percent change needs both the start and end values."},
+  {id:"d11",topic:"Graphics Interpretation",diff:"easy",stem:"On a line chart, a company's profit margin falls steadily from 20% in Q1 to 12% in Q4. The trend over the year is best described as:",choices:["rising","flat","declining","cyclical with no net change","undefined"],answer:2,exp:"The margin drops from 20% to 12% — a declining trend.",why:"Read the direction of the line; it moves downward."}
+);
+QUIZ.qm.push(
+  {id:"qm14",topic:"Time value",diff:"hard",stem:"An investment doubles in 4 years. Using the Rule of 72, its approximate annual compound return is:",choices:["12%","15%","18%","25%","50%"],answer:2,exp:"Rule of 72: rate ≈ 72 / years to double = 72/4 = 18%.",why:"50% would quadruple-plus over 4 years; the rule gives a fast estimate near the true 18.9%."},
+  {id:"qm15",topic:"Probability",diff:"med",stem:"If two assets have a correlation of exactly +1, the portfolio standard deviation equals:",choices:["zero","the weighted average of the two assets' standard deviations","less than the weighted average","greater than either asset's SD","cannot be determined"],answer:1,exp:"With ρ = +1 there is no diversification benefit, so portfolio SD = weighted average of the SDs.",why:"Only when ρ < 1 does portfolio risk fall below the weighted average."}
+);
+QUIZ.econ.push(
+  {id:"ec12",topic:"Monetary policy",diff:"med",stem:"If a central bank raises its policy interest rate, it is most likely pursuing:",choices:["expansionary monetary policy","contractionary monetary policy","expansionary fiscal policy","trade policy","a weaker currency"],answer:1,exp:"Higher rates cool demand and inflation — contractionary monetary policy.",why:"Expansionary policy lowers rates; fiscal policy is about spending and taxes."},
+  {id:"ec13",topic:"FX",diff:"hard",stem:"If a country's currency depreciates, all else equal, its exports become:",choices:["more expensive abroad","cheaper abroad and more competitive","unaffected","subject to tariffs","more expensive at home only"],answer:1,exp:"A weaker currency makes the country's goods cheaper for foreign buyers, boosting export competitiveness.",why:"Depreciation lowers the foreign-currency price of exports; it doesn't raise it."}
+);
+
+/* ---------- flashcards ---------- */
+const FLASHCARDS={
+  gmat:[
+    {id:"gf1",topic:"Percents",front:"Percent change formula",back:"(new − old) / old × 100%"},
+    {id:"gf2",topic:"Percents",front:"Two successive percents combine by…",back:"multiplying the factors (e.g. ×1.25 then ×0.80), never adding"},
+    {id:"gf3",topic:"Number properties",front:"n(n+1) — the product of two consecutive integers — is always…",back:"even"},
+    {id:"gf4",topic:"Algebra",front:"Solving an inequality, dividing both sides by a negative…",back:"flips the inequality sign"},
+    {id:"gf5",topic:"Algebra",front:"Roots of x² + bx + c = 0",back:"two numbers that multiply to c and add to b; the roots are their negatives"},
+    {id:"gf6",topic:"Word problems",front:"Distance =",back:"rate × time"},
+    {id:"gf7",topic:"Work",front:"Combined work rate of A (a hrs) and B (b hrs)",back:"1/a + 1/b  (rates add, times don't)"},
+    {id:"gf8",topic:"Averages",front:"Turn an average into a total",back:"sum = average × count"},
+    {id:"gf9",topic:"Probability",front:"P(A and B) for independent events",back:"P(A) × P(B)"},
+    {id:"gf10",topic:"Statistics",front:"Standard deviation of a set of identical values",back:"zero (no spread)"},
+    {id:"gf11",topic:"Data Sufficiency",front:"x² > 0 tells you…",back:"x ≠ 0 — NOT that x > 0"},
+    {id:"gf12",topic:"CR",front:"How to test whether a statement is a required assumption",back:"negate it — if the argument falls apart, it's required"},
+    {id:"gf13",topic:"DI",front:"A correlation between two variables means…",back:"they move together — it does NOT prove one causes the other"},
+    {id:"gf14",topic:"Fractions",front:"1/8 as a percent",back:"12.5%"}
+  ],
+  cfa:[
+    {id:"cf1",topic:"Returns",front:"Holding period return",back:"(P₁ − P₀ + income) / P₀"},
+    {id:"cf2",topic:"Returns",front:"Geometric mean return",back:"[ (1+R₁)(1+R₂)…(1+Rₙ) ]^(1/n) − 1"},
+    {id:"cf3",topic:"Returns",front:"Which return measure judges a manager's skill (ignores cash-flow timing)?",back:"time-weighted return"},
+    {id:"cf4",topic:"Time value",front:"Future value of a lump sum",back:"FV = PV(1 + r)ⁿ"},
+    {id:"cf5",topic:"Time value",front:"Value of a level perpetuity",back:"A / r"},
+    {id:"cf6",topic:"Time value",front:"Growing perpetuity (Gordon)",back:"A₁ / (r − g)"},
+    {id:"cf7",topic:"Statistics",front:"A sample variance divides the sum of squared deviations by…",back:"n − 1"},
+    {id:"cf8",topic:"Statistics",front:"Coefficient of variation",back:"SD / mean  (lower = less risk per unit of return)"},
+    {id:"cf9",topic:"Statistics",front:"Sharpe ratio",back:"(Rₚ − R_f) / σₚ"},
+    {id:"cf10",topic:"Probability",front:"Two-asset portfolio variance",back:"w₁²σ₁² + w₂²σ₂² + 2w₁w₂ρσ₁σ₂"},
+    {id:"cf11",topic:"Probability",front:"Portfolio risk vs the weighted-average SD when ρ < 1",back:"strictly less — that's diversification"},
+    {id:"cf12",topic:"Hypothesis testing",front:"Type I error",back:"rejecting a true null hypothesis (probability = α)"},
+    {id:"cf13",topic:"Regression",front:"What R² measures",back:"the fraction of Y's variation explained by X"},
+    {id:"cf14",topic:"Economics",front:"A firm maximizes profit where…",back:"marginal revenue = marginal cost"},
+    {id:"cf15",topic:"Economics",front:"Short-run shutdown rule",back:"shut down if price < average variable cost"},
+    {id:"cf16",topic:"Economics",front:"GDP (expenditure approach)",back:"C + I + G + (X − M)"},
+    {id:"cf17",topic:"Economics",front:"Simple spending multiplier",back:"1 / (1 − MPC)"},
+    {id:"cf18",topic:"Economics",front:"Fisher: the nominal interest rate ≈",back:"real rate + expected inflation"},
+    {id:"cf19",topic:"FX",front:"A rising price/base FX quote means…",back:"the base currency has appreciated"}
+  ]
+};
+
+/* ---------- quiz rendering ---------- */
+function letter(i){ return String.fromCharCode(65+i); }
+function renderQuestion(sectionKey,q,colorVar){
+  const choices=q.ds?DS_CHOICES:q.choices;
+  const d=diffOf(q);
+  const wrap=document.createElement('div'); wrap.className='q-block'; wrap.dataset.qid=q.id; wrap.dataset.diff=d;
+  let stem=q.stem;
+  if(q.table) stem=q.table+stem;
+  if(q.multisource) stem='<div style="background:var(--paper-2);border-radius:10px;padding:12px 16px;margin-bottom:12px;font-size:13.5px">'+q.multisource+'</div>'+stem;
+  if(q.passage) stem='<blockquote style="border-left:3px solid var(--verbal);background:var(--verbal-bg);margin:0 0 14px;padding:14px 18px;border-radius:0 10px 10px 0;font-size:14.5px">'+q.passage+'</blockquote>'+stem;
+  const dlabel={easy:"Easy",med:"Medium",hard:"Hard"}[d];
+  let html='<div class="q-topic">'+q.topic+'<span class="dbadge '+d+'">'+dlabel+'</span></div><div class="q-stem">'+stem+'</div><div class="choices">';
+  choices.forEach((c,i)=>{ html+='<label class="choice" data-i="'+i+'"><input type="radio" name="'+q.id+'" value="'+i+'"><span class="letter">'+letter(i)+'.</span><span>'+c+'</span></label>'; });
+  html+='</div><div class="q-actions"><button class="btn" style="background:'+colorVar+'" data-check>Check answer</button><span class="verdict"></span><button class="flagbtn" data-flag>🚩 Flag</button></div>';
+  html+='<div class="explain"><strong>Explanation.</strong> '+q.exp+'<div class="why"><strong>Why the traps fail:</strong> '+(q.why||'')+'</div></div>';
+  wrap.innerHTML=html;
+  const checkBtn=wrap.querySelector('[data-check]'),verdict=wrap.querySelector('.verdict'),explain=wrap.querySelector('.explain'),labels=[...wrap.querySelectorAll('.choice')],flagBtn=wrap.querySelector('[data-flag]');
+  function paintFlag(){ const on=!!progress.flagged[q.id]; flagBtn.classList.toggle('on',on); flagBtn.textContent=on?"🚩 Flagged":"🚩 Flag"; }
+  paintFlag();
+  flagBtn.addEventListener('click',()=>{ progress.flagged[q.id]=!progress.flagged[q.id]; if(!progress.flagged[q.id]) delete progress.flagged[q.id]; saveP(); paintFlag(); applyFilterAll(); });
+  function reveal(chosen){
+    labels.forEach((lab,i)=>{ lab.classList.add('disabled'); lab.querySelector('input').disabled=true; if(i===q.answer) lab.classList.add('correct'); if(i===chosen&&chosen!==q.answer) lab.classList.add('incorrect'); });
+    const ok=chosen===q.answer; verdict.textContent=ok?"✓ Correct":"✗ Not quite"; verdict.className="verdict "+(ok?"ok":"no"); explain.classList.add('show'); checkBtn.disabled=true;
+    if(!wrap.querySelector('[data-retry]')){ const rb=document.createElement('button'); rb.className="btn ghost"; rb.setAttribute('data-retry',''); rb.textContent="↺ Retry"; rb.addEventListener('click',()=>{ delete progress.answers[q.id]; saveP(); const fresh=renderQuestion(sectionKey,q,colorVar); wrap.replaceWith(fresh); applyFilterAll(); refreshChrome(); }); wrap.querySelector('.q-actions').appendChild(rb); }
+  }
+  const prev=progress.answers[q.id];
+  if(prev){ const inp=wrap.querySelector('input[value="'+prev.chosen+'"]'); if(inp) inp.checked=true; reveal(prev.chosen); }
+  checkBtn.addEventListener('click',()=>{
+    const sel=wrap.querySelector('input[name="'+q.id+'"]:checked');
+    if(!sel){ verdict.textContent="Pick an answer first."; verdict.className="verdict no"; return; }
+    const chosen=parseInt(sel.value,10);
+    progress.answers[q.id]={correct:chosen===q.answer,chosen,sec:sectionKey}; saveP(); reveal(chosen); refreshChrome();
+  });
+  return wrap;
+}
+const QCOLORS={quant:"var(--quant)",verbal:"var(--verbal)",di:"var(--di)",qm:"var(--quant)",econ:"var(--verbal)"};
+function buildToolbar(box){
+  const tb=document.createElement('div'); tb.className='qfilter';
+  tb.innerHTML='<div class="grp"><span class="lbl">Show</span>'
+    +'<button data-f="status" data-v="all" class="active">All</button>'
+    +'<button data-f="status" data-v="unanswered">Unanswered</button>'
+    +'<button data-f="status" data-v="missed">Missed</button>'
+    +'<button data-f="status" data-v="flagged">Flagged</button></div>'
+    +'<div class="grp"><span class="lbl">Level</span>'
+    +'<button data-f="diff" data-v="all" class="active">All</button>'
+    +'<button data-f="diff" data-v="easy">Easy</button>'
+    +'<button data-f="diff" data-v="med">Medium</button>'
+    +'<button data-f="diff" data-v="hard">Hard</button></div>';
+  tb.querySelectorAll('button').forEach(b=> b.addEventListener('click',()=>{
+    const f=b.dataset.f; box.dataset['f'+f]=b.dataset.v;
+    tb.querySelectorAll('button[data-f="'+f+'"]').forEach(x=>x.classList.toggle('active',x===b));
+    applyFilter(box);
+  }));
+  return tb;
+}
+function applyFilter(box){
+  const status=box.dataset.fstatus||'all', d=box.dataset.fdiff||'all';
+  let shown=0;
+  box.querySelectorAll('.q-block').forEach(qb=>{
+    const qid=qb.dataset.qid, a=progress.answers[qid];
+    const sOk = status==='all' || (status==='unanswered'&&!a) || (status==='missed'&&a&&!a.correct) || (status==='flagged'&&progress.flagged[qid]);
+    const dOk = d==='all' || qb.dataset.diff===d;
+    const show=sOk&&dOk; qb.style.display=show?'':'none'; if(show) shown++;
+  });
+  let empty=box.querySelector('.qempty');
+  if(shown===0){ if(!empty){ empty=document.createElement('div'); empty.className='qempty'; box.appendChild(empty); } empty.textContent="No questions match this filter."; empty.style.display=''; }
+  else if(empty){ empty.style.display='none'; }
+}
+function applyFilterAll(){ document.querySelectorAll('.practice').forEach(applyFilter); }
+function mountQuizzes(){
+  document.querySelectorAll('.practice').forEach(box=>{
+    const key=box.dataset.quiz;
+    box.appendChild(buildToolbar(box));
+    (QUIZ[key]||[]).forEach(q=> box.appendChild(renderQuestion(key,q,QCOLORS[key]||"var(--quant)")) );
+    applyFilter(box);
+  });
+}
+function wireReviews(){
+  document.querySelectorAll('[data-review]').forEach(btn=>{
+    const id=btn.dataset.review;
+    function paint(){ const done=!!progress.reviewed[id]; btn.classList.toggle('done',done); btn.textContent=done?"✓ Reviewed":"Mark reviewed"; }
+    paint();
+    btn.addEventListener('click',()=>{ progress.reviewed[id]=!progress.reviewed[id]; saveP(); paint(); refreshChrome(); });
+  });
+}
+function chapterIdsFor(prefix){ return [...document.querySelectorAll('[data-review]')].map(b=>b.dataset.review).filter(id=>id.indexOf(prefix)===0); }
+function sectionStats(cfg){
+  const qs=QUIZ[cfg.key]||[]; let attempted=0,correct=0;
+  qs.forEach(q=>{ const a=progress.answers[q.id]; if(a){ attempted++; if(a.correct) correct++; } });
+  const chs=chapterIdsFor(cfg.prefix); let done=0; chs.forEach(id=>{ if(progress.reviewed[id]) done++; });
+  return {total:qs.length,attempted,correct,chapters:chs.length,chaptersDone:done};
+}
+function ring(pct,color){
+  const r=34,c=2*Math.PI*r,off=c*(1-pct/100);
+  return '<svg width="92" height="92" viewBox="0 0 92 92"><circle cx="46" cy="46" r="'+r+'" fill="none" stroke="var(--paper-2)" stroke-width="9"/><circle cx="46" cy="46" r="'+r+'" fill="none" stroke="'+color+'" stroke-width="9" stroke-linecap="round" stroke-dasharray="'+c.toFixed(1)+'" stroke-dashoffset="'+off.toFixed(1)+'" transform="rotate(-90 46 46)"/><text x="46" y="52" text-anchor="middle" font-family="Georgia,serif" font-size="22" font-weight="600" fill="#10233b">'+Math.round(pct)+'%</text></svg>';
+}
+function fillDashboard(programKey){
+  const prog=PROGRAMS[programKey]; const body=document.getElementById(prog.dashId); if(!body) return;
+  let att=0,corr=0,totQ=0,chTot=0,chDone=0;
+  prog.sections.forEach(cfg=>{ const s=sectionStats(cfg); att+=s.attempted;corr+=s.correct;totQ+=s.total;chTot+=s.chapters;chDone+=s.chaptersDone; });
+  const acc=att?Math.round(100*corr/att):0, readPct=chTot?100*chDone/chTot:0, quizPct=totQ?100*att/totQ:0;
+  let html='<div class="hero"><div class="ring-wrap">'
+    +'<div class="ring">'+ring(readPct,"var(--verbal)")+'<div class="lbl">Chapters read<br>'+chDone+'/'+chTot+'</div></div>'
+    +'<div class="ring">'+ring(quizPct,"var(--quant)")+'<div class="lbl">Questions done<br>'+att+'/'+totQ+'</div></div>'
+    +'</div><div class="pitch"><h2>'+greeting(programKey,att)+'</h2><p>'+recommend(programKey)+'</p></div></div>';
+  html+='<div class="stat-grid">'
+    +'<div class="stat"><div class="num">'+(att?acc+'%':'—')+'</div><div class="lbl">Quiz accuracy</div></div>'
+    +'<div class="stat"><div class="num">'+chDone+'/'+chTot+'</div><div class="lbl">Lessons reviewed</div></div>'
+    +'<div class="stat"><div class="num">'+att+'/'+totQ+'</div><div class="lbl">Practice attempted</div></div>'
+    +'<div class="stat"><div class="num">'+progress.streak.count+' 🔥</div><div class="lbl">Day streak</div></div>'
+    +'</div>';
+  html+='<div class="card"><h2>By section</h2>';
+  prog.sections.forEach(cfg=>{
+    const s=sectionStats(cfg);
+    const readP=s.chapters?Math.round(100*s.chaptersDone/s.chapters):0;
+    const a=s.attempted?Math.round(100*s.correct/s.attempted):0;
+    html+='<div class="prog-row"><div class="name"><span class="swatch" style="background:var('+cfg.color+')"></span>'+cfg.name+'</div>'
+      +'<div class="bar"><span style="width:'+readP+'%;background:var('+cfg.color+')"></span></div>'
+      +'<div class="pct">'+s.chaptersDone+'/'+s.chapters+' read · '+(s.attempted?a+'% acc':'quiz —')+'</div></div>';
+  });
+  html+='</div>';
+  html+=focusCard(programKey);
+  body.innerHTML=html;
+  body.querySelectorAll('[data-goview]').forEach(b=> b.addEventListener('click',()=>{ showView(b.dataset.goview); }));
+}
+function focusCard(programKey){
+  const prog=PROGRAMS[programKey];
+  const rows=prog.sections.map(cfg=>{ const s=sectionStats(cfg); const acc=s.attempted?Math.round(100*s.correct/s.attempted):null; return {cfg,acc,attempted:s.attempted}; });
+  const attempted=rows.filter(r=>r.attempted>0);
+  let inner;
+  if(attempted.length===0){
+    inner='<p style="color:var(--ink-soft);margin:0">Answer a few questions and your weakest areas will surface here, so you always know where to focus next.</p>';
+  } else {
+    const sorted=attempted.slice().sort((a,b)=>a.acc-b.acc);
+    inner=sorted.map(r=>{
+      const view=(programKey==='cfa'?'cfa-':'')+r.cfg.key.replace('qm','cfa-qm').replace('econ','cfa-econ');
+      const target = programKey==='cfa' ? ('cfa-'+ (r.cfg.key==='qm'?'qm':'econ')) : r.cfg.key;
+      return '<div class="focus-row"><div class="fa-name">'+r.cfg.name+'</div><div class="fa-acc">'+r.acc+'% acc</div><button class="fa-go" data-goview="'+target+'">Review →</button></div>';
+    }).join('');
+  }
+  return '<div class="card"><h2>Focus areas</h2>'+inner+'</div>';
+}
+function greeting(programKey,att){ if(att===0) return programKey==='cfa'?"Welcome to the charter track.":"Welcome — let's start from scratch."; return "Nice progress. Keep the streak going."; }
+function recommend(programKey){
+  const prog=PROGRAMS[programKey];
+  const stats=prog.sections.map(c=>({c,s:sectionStats(c)}));
+  const totalAtt=stats.reduce((n,x)=>n+x.s.attempted,0);
+  if(totalAtt===0){ const first=prog.sections[0]; return "Open <strong>"+first.name+" → Chapter 1</strong>, read the lesson and work the examples, then try the practice questions. Every chapter teaches before it tests."; }
+  const least=stats.slice().sort((a,b)=>(a.s.chaptersDone/a.s.chapters)-(b.s.chaptersDone/b.s.chapters))[0];
+  if(least.s.chaptersDone<least.s.chapters) return "Your least-read section is <strong>"+least.c.name+"</strong> ("+least.s.chaptersDone+"/"+least.s.chapters+" chapters). Read the next chapter there, then practice.";
+  return "You've read every chapter here — revisit missed questions (try the <em>Missed</em> filter) and review your flashcards daily.";
+}
+
+/* ---------- error journal ---------- */
+function renderJournal(programKey){
+  const host=document.getElementById('journal-host'); if(!host) return;
+  const prog=PROGRAMS[programKey];
+  const sectionNames={}; prog.sections.forEach(c=> sectionNames[c.key]=c.name);
+  let items=[];
+  prog.sections.forEach(cfg=>{ (QUIZ[cfg.key]||[]).forEach(q=>{ const a=progress.answers[q.id]; if(a&&!a.correct){ items.push({q,cfg,a}); } }); });
+  document.getElementById('journal-sub').textContent = "Missed questions for "+prog.label+" — review them, jot why you slipped, then use the Missed filter in practice to redo them.";
+  if(items.length===0){ host.innerHTML='<div class="qempty">No missed questions yet for '+prog.label+'. Mistakes you make in practice will collect here automatically.</div>'; return; }
+  host.innerHTML=items.map(it=>{
+    const q=it.q, choices=q.ds?DS_CHOICES:q.choices;
+    const yours=choices[it.a.chosen], right=choices[q.answer];
+    const note=progress.notes[q.id]||"";
+    const stem=q.stem.replace(/<br>/g,' ');
+    return '<div class="jitem"><div class="jq">['+sectionNames[it.cfg.key]+' · '+q.topic+'] '+stem+'</div>'
+      +'<div class="jline jwrong">Your answer: '+yours+'</div>'
+      +'<div class="jline jright">Correct: '+right+'</div>'
+      +'<div class="jexp">'+q.exp+'</div>'
+      +'<textarea class="jnote" data-note="'+q.id+'" placeholder="Why did I miss this? (concept gap / careless / misread / timing)">'+note+'</textarea></div>';
+  }).join('');
+  host.querySelectorAll('[data-note]').forEach(t=> t.addEventListener('input',()=>{ progress.notes[t.dataset.note]=t.value; saveP(); }));
+}
+
+/* ---------- flashcards (Leitner spaced repetition) ---------- */
+const BOX_DAYS=[0,1,3,7,16];
+function cardDue(id){ const st=progress.cards[id]; return st?st.due:0; }
+function dueDeck(programKey){ const today=dayNum(); return FLASHCARDS[programKey].filter(c=> cardDue(c.id)<=today); }
+let flashState={prog:null,queue:[],idx:0,flipped:false};
+function renderFlash(programKey){
+  const host=document.getElementById('flash-host'); if(!host) return;
+  const prog=PROGRAMS[programKey];
+  document.getElementById('flash-sub').textContent="Spaced-repetition cards for "+prog.label+". Rate each one honestly — the ones you miss come back sooner.";
+  flashState.prog=programKey; flashState.queue=dueDeck(programKey); flashState.idx=0; flashState.flipped=false;
+  paintFlash();
+}
+function paintFlash(){
+  const host=document.getElementById('flash-host'); if(!host) return;
+  const total=FLASHCARDS[flashState.prog].length;
+  if(flashState.idx>=flashState.queue.length){
+    host.innerHTML='<div class="flashdone"><div class="big">✓ All caught up for today</div><p style="color:var(--ink-soft)">You\'ve reviewed every card that was due. '+total+' cards in this deck. Come back tomorrow, or reset to run the whole deck again.</p><div class="flashrate"><button class="good" data-allcards>Review all '+total+' now</button></div></div>';
+    host.querySelector('[data-allcards]').addEventListener('click',()=>{ flashState.queue=FLASHCARDS[flashState.prog].slice(); flashState.idx=0; flashState.flipped=false; paintFlash(); });
+    return;
+  }
+  const card=flashState.queue[flashState.idx];
+  const due=flashState.queue.length-flashState.idx;
+  let html='<div class="flashmeta"><span><b>'+due+'</b> due now</span><span><b>'+total+'</b> in deck</span><span>card '+(flashState.idx+1)+' of '+flashState.queue.length+'</span></div>';
+  html+='<div class="flashcard" data-flip><div class="ftopic">'+card.topic+'</div><div class="fcontent">'+(flashState.flipped?card.back:card.front)+'</div><div class="fhint">'+(flashState.flipped?'':'click to reveal')+'</div></div>';
+  if(flashState.flipped){ html+='<div class="flashrate"><button class="again" data-rate="again">Again</button><button class="good" data-rate="good">Got it</button></div>'; }
+  host.innerHTML=html;
+  host.querySelector('[data-flip]').addEventListener('click',()=>{ flashState.flipped=!flashState.flipped; paintFlash(); });
+  host.querySelectorAll('[data-rate]').forEach(b=> b.addEventListener('click',()=>{
+    const card=flashState.queue[flashState.idx];
+    let st=progress.cards[card.id]||{box:0,due:0};
+    if(b.dataset.rate==='good') st.box=Math.min(st.box+1,BOX_DAYS.length-1); else st.box=0;
+    st.due=dayNum()+BOX_DAYS[st.box]; progress.cards[card.id]=st; saveP();
+    flashState.idx++; flashState.flipped=false; paintFlash();
+  }));
+}
+
+/* ---------- topbar / chrome ---------- */
+function updateTopbar(){
+  const pk=document.body.dataset.prog, prog=PROGRAMS[pk];
+  let att=0,corr=0,chTot=0,chDone=0;
+  prog.sections.forEach(c=>{ const s=sectionStats(c); att+=s.attempted;corr+=s.correct;chTot+=s.chapters;chDone+=s.chaptersDone; });
+  const acc=att?Math.round(100*corr/att):0;
+  document.getElementById('tb-title').innerHTML='<b>'+prog.label+'</b> · study desk';
+  document.getElementById('tb-meta').innerHTML='<span><b>'+chDone+'/'+chTot+'</b> chapters</span><span><b>'+(att?acc+'%':'—')+'</b> accuracy</span><span><b>'+progress.streak.count+'</b> 🔥 streak</span>';
+}
+function refreshChrome(){
+  Object.keys(PROGRAMS).forEach(pk=>{ PROGRAMS[pk].sections.forEach(c=>{ const el=document.getElementById('mini-'+c.key); if(el){ const s=sectionStats(c); el.textContent=s.attempted+'/'+s.total; } }); });
+  fillDashboard(document.body.dataset.prog);
+  updateTopbar();
+}
+function afterView(viewName){
+  const pk=document.body.dataset.prog;
+  if(viewName.indexOf('dashboard')>=0) fillDashboard(pk);
+  else if(viewName==='flashcards') renderFlash(pk);
+  else if(viewName==='journal') renderJournal(pk);
+}
+function showView(viewName){
+  document.querySelectorAll('.view').forEach(sec=>sec.classList.toggle('active', sec.id==='view-'+viewName));
+  const pk=document.body.dataset.prog;
+  document.querySelectorAll('#nav-'+pk+' button').forEach(b=>b.classList.toggle('active', b.dataset.view===viewName));
+  progress.last={prog:pk,view:viewName}; saveP();
+  afterView(viewName);
+  window.scrollTo(0,0);
+}
+function setProgram(pk,view){
+  document.body.dataset.prog=pk;
+  document.querySelectorAll('.progswitch button').forEach(b=>b.classList.toggle('active', b.dataset.prog===pk));
+  showView(view||PROGRAMS[pk].defaultView);
+  updateTopbar();
+}
+
+/* ---------- backup / export ---------- */
+function exportProgress(){
+  const blob=new Blob([JSON.stringify(progress,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob); const a=document.createElement('a');
+  a.href=url; a.download='study-desk-progress.json'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+}
+function importProgress(file){
+  const r=new FileReader();
+  r.onload=()=>{ try{ const data=JSON.parse(r.result); if(data&&typeof data==='object'){ progress=Object.assign({answers:{},reviewed:{},streak:{count:0,last:null},flagged:{},notes:{},cards:{},last:null},data); saveP(); location.reload(); } }catch(e){ alert("Couldn't read that file — make sure it's a Study Desk progress export."); } };
+  r.readAsText(file);
+}
+
+function init(){
+  mountQuizzes(); wireReviews();
+  document.querySelectorAll('.progswitch button').forEach(b=> b.addEventListener('click',()=> setProgram(b.dataset.prog)) );
+  document.querySelectorAll('.nav button[data-view]').forEach(b=> b.addEventListener('click',()=> showView(b.dataset.view)) );
+  const rb=document.getElementById('resetBtn'); if(rb) rb.addEventListener('click',()=>{ if(confirm("Reset ALL progress across GMAT and CFA — chapters, quizzes, flags, notes, flashcards, and streak? This can't be undone.")){ progress={answers:{},reviewed:{},streak:{count:1,last:todayStr()},flagged:{},notes:{},cards:{},last:null}; saveP(); location.reload(); } });
+  const eb=document.getElementById('exportBtn'); if(eb) eb.addEventListener('click',exportProgress);
+  const ib=document.getElementById('importBtn'), fi=document.getElementById('importFile');
+  if(ib&&fi){ ib.addEventListener('click',()=>fi.click()); fi.addEventListener('change',()=>{ if(fi.files[0]) importProgress(fi.files[0]); }); }
+  const last=progress.last;
+  if(last&&PROGRAMS[last.prog]) setProgram(last.prog,last.view); else setProgram('gmat');
+  refreshChrome();
+}
+init();
+</script>
+</body>
+</html>
